@@ -3,8 +3,9 @@
 
     mov r1, #11 @ no. of words
     ldr r5, =AA @ final address
-    add r5, r5 ,r1 , lsl #2
-    mov r6, #0
+    sub r1, r1, #1 @ n-1 transversals required for sorting
+    add r5, r5 ,r1 , lsl #2 @ =AA + 4*(n-1)
+    mov r6, #0 @ counts no. of time traversed over list
 
 VALUE:
     mov r0, #0 @ pass for sorted
@@ -40,5 +41,5 @@ PASSED:
     swi SWI_Exit
     
 	.data
-AA: .word   1, 9, 8, 2, 6, 4, 4, 3, 2, 1, 11
+AA: .word   1, 9, 8, 2, 6, 4, 4, 3, 2, 11, 1
 	.end
