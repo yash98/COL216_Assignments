@@ -4,6 +4,7 @@
     mov r1, #11 @ no. of words
     ldr r5, =AA @ final address
     add r5, r5 ,r1 , lsl #2
+    mov r6, #0
 
 VALUE:
     mov r0, #0 @ pass for sorted
@@ -22,12 +23,18 @@ CONTINUE:
     b AGAIN
 
 SWAP:
-    str r4, [r2]
+    str r4, [r2] @ store reverse as loaded
     str r3, [r2, #4]
-    orr r0, r0, #1
+    orr r0, r0, #1 @ pass variable to 1 if swap required
     b CONTINUE
 
 AGAIN:
+    add r6, r6, #1
+    cmp r6, r1
+    blt PASSED
+    swi SWI_Exit
+
+PASSED:
     cmp r0, #0
     bne VALUE
     swi SWI_Exit
