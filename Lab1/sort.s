@@ -1,17 +1,18 @@
     .equ SWI_Exit, 0x11
 	.text
 
-    mov r5, [=AA, r1, lsl #2] @ final address
-    mov r1, #10 @ no. of words
+    mov r1, #11 @ no. of words
+    ldr r5, =AA @ final address
+    add r5, r5 ,r1 , lsl #2
 
 VALUE:
     mov r0, #0 @ pass for sorted
-    mov r2, =AA @ address incrementor
+    ldr r2, =AA @ address incrementor(incm)
 
 LOOP:
-    ldr r3, [r2]
-    ldr r4, [r2, #4]
-    cmp r3, r4
+    ldr r3, [r2] @ load incrementor's address
+    ldr r4, [r2, #4] @ load next of incm
+    cmp r3, r4 
     bgt SWAP
 
 CONTINUE:
@@ -32,5 +33,5 @@ AGAIN:
     swi SWI_Exit
     
 	.data
-AA: .word =	10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+AA: .word   1, 9, 8, 2, 6, 4, 4, 3, 2, 1, 11
 	.end
