@@ -21,7 +21,7 @@ CONTINUE:
     add r2, r2, #4
     cmp r2, r5
     blt LOOP
-    b AGAIN
+    b PASSED
 
 SWAP:
     str r4, [r2] @ store reverse as loaded
@@ -29,17 +29,12 @@ SWAP:
     orr r0, r0, #1 @ pass variable to 1 if swap required
     b CONTINUE
 
-AGAIN:
-    add r6, r6, #1
-    cmp r6, r1
-    blt PASSED
-    swi SWI_Exit
-
 PASSED:
+    sub r5, r5, #4
     cmp r0, #0
     bne VALUE
     swi SWI_Exit
     
 	.data
-AA: .word   1, 9, 8, 2, 6, 4, 4, 3, 2, 11, 1
+AA: .word   11, 9, 8, 5, 6, 20, 4, 3, 2, 11, 1
 	.end
