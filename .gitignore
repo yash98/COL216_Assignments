@@ -1,4 +1,5 @@
 .vscode/
+.idea/
 
 *.docx    binary
 *.odt    binary
