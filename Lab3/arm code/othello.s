@@ -17,7 +17,7 @@ main:
 stale_check:
     bl possible_places_wrapper
     ldr r10, =Skip
-    ldr r0, r10
+    ldr r0, [r10]
     cmp r0, r11
     blne stale_mate
     mvn r0, r11
@@ -33,17 +33,17 @@ chance:
     mov r0,#38
     mov r1,#14
     mov r2, r3
-    swi SWI_PrintChar
+    swi SWI_DispChar
     mov r0,#39
     mov r1,#14
     mov r2, #'X
-    swi SWI_PrintChar
+    swi SWI_DispChar
     bl input_keyboard
     mov r1, r0
     mov r0, #39
     mov r1, #14
     mov r2, #'Y
-    swi SWI_PrintChar
+    swi SWI_DispChar
     bl input_keyboard
     mov r2, r0
 
@@ -114,9 +114,99 @@ input_keyboard:
     mov pc, lr
 
 move:
+    stmfd sp!, {lr}
+    stmfd sp!, {lr, r1, r2}
+    mov r1, r4
+    mov r2, r5
+    bl toOneD
+    ldmfd sp!, {lr, r1, r2}
 
+    ldr r10, =Board
+    add r10, r10, r0
 
+    cmp r0, #'P
+    bne chance
 
+    strne r0, [r10]
+    bl clear_p
+
+    mov r4, r1
+    mov r5, r2
+
+    ldr r9, =directions
+    add r10, r10, #64
+
+directions:
+    ldr r6, [r9], #4
+    ldr r7, [r9], #4
+
+    stmfd sp!, {lr, r9}
+    bl forward_loop
+    ldmfd sp!, {lr, r9}
+
+    cmp r9, r10
+    bne directions
+    ldmfd sp!, {lr}
+    mov pc, lr
+
+forward_loop:
+    add r4, r4, r6
+    add r5, r5, r7
+    
+    mov r0, #0
+    cmp r4, #0
+    orrlt r0, r0, #1
+    cmp r5, #7
+    orrgt r0, r0, #1
+    cmp r5, #0
+    orrlt r0, r0, #1
+    cmp r5, #7
+    orrgt r0, r0, #1
+    cmp r0, #1
+    beq forward_loop_cond
+
+    stmfd sp!, {lr, r1, r2}
+    mov r1, r4
+    mov r2, r5
+    bl toOneD
+    ldmfd sp!, {lr, r1, r2}
+
+    ldr r10, =Board
+    add r10, r10, r0
+    ldr r0, [r10]
+
+    cmp r3, r0
+    bne forward_loop
+    stmfd sp!, {lr}
+    mvn r6, r6
+    mvn r7, r7
+    bleq back_loop
+    ldmfd sp!, {lr}
+
+forward_loop_cond:
+    mov r4, r1
+    mov r5, r2
+    mov pc, lr
+
+back_loop:
+    add r4, r4, r6
+    add r5, r5, r7
+
+    stmfd sp!, {lr, r1, r2}
+    mov r1, r4
+    mov r2, r5
+    bl toOneD
+    ldmfd sp!, {lr, r1, r2}
+
+    ldr r10, =Board
+    add r10, r10, r0
+    ldr r3, [r10]
+
+    cmp r4, r1
+    bne back_loop
+    cmpeq r5, r2
+    bne back_loop
+    mov pc, lr
 
 
 possible_places_wrapper:
