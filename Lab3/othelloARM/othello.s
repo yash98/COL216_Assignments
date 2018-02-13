@@ -153,8 +153,11 @@ main_end:
     swieq SWI_DispStr
 
 input_keyboard:
+    stmfd sp!, {lr}
+    mov r4, #0
+    mov r6, #0x1
     swi SWI_Blue
-    cmp r0, #0x1
+    cmp r0, r6 lsl r6
     moveq r0, #0
     cmp r0, #0x10
     moveq r0, #1
@@ -177,8 +180,34 @@ input_keyboard:
     b input_keyboard
     mov pc, lr
 
+othello:
+    ldr r2, =board
+    mov r0, #0
+    mov r4, #0
+
+othello_board_while1:
+    cmp r0, #63
+    moveq pc, lr
+    mov r1, #'O
+    str r1, [r2]
+    cmp r0, #27
+    moveq r1, #'W
+    streq r1 , [r2]
+    cmp r0, #28
+    moveq r1, #'B
+    streq r1, [r2]
+    cmp r0, #36
+    moveq r1, #'W
+    streq r1 , [r2]
+    cmp r0, #35
+    moveq r1, #'B
+    streq r1, [r2]
+    add r0, r0, #1
+    add r2, r2, #4
+    b othello_board_while1
 
     .data 
 board: .space 256
 wrongPlace: .asciz "Wrong Place\n"
 gameEnd: .asciz "Game End"
+movement: .word 1,0, 1,1, 0,1, -1,1, -1,0, -1,-1, 0,-1, 1,-1
