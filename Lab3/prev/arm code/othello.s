@@ -5,7 +5,30 @@
     .equ SWI_DispStr, 0x204
 
     mov r3, #'W
-main:
+
+
+reset:
+    cmp r0, #63
+    moveq r0, #0
+    beq main
+    mov r1, #'O
+    str r1, [r2]
+    cmp r0, #27
+    moveq r1, #'W
+    streq r1 , [r2]
+    cmp r0, #28
+    moveq r1, #'B
+    streq r1, [r2]
+    cmp r0, #36
+    moveq r1, #'W
+    streq r1 , [r2]
+    cmp r0, #35
+    moveq r1, #'B
+    streq r1, [r2]
+    add r0, r0, #1
+    add r2, r2, #4
+
+mains:
     @ provide to callee
     @ r3 char
     @ r1 x
@@ -16,6 +39,7 @@ main:
 
 stale_check:
     bl possible_places_wrapper
+    bl print_board
     ldr r10, =Skip
     ldr r0, [r10]
     cmp r0, r11
@@ -27,9 +51,6 @@ stale_check:
     mov r11, #0
 
 chance:
-
-
-
     mov r0,#38
     mov r1,#14
     mov r2, r3
@@ -64,27 +85,6 @@ preset:
     
     b reset
     ldr r2, =Board
-
-reset:
-    cmp r0, #63
-    moveq r0, #0
-    beq main
-    mov r1, #'O
-    str r1, [r2]
-    cmp r0, #27
-    moveq r1, #'W
-    streq r1 , [r2]
-    cmp r0, #28
-    moveq r1, #'B
-    streq r1, [r2]
-    cmp r0, #36
-    moveq r1, #'W
-    streq r1 , [r2]
-    cmp r0, #35
-    moveq r1, #'B
-    streq r1, [r2]
-    add r0, r0, #1
-    add r2, r2, #4
 
 
 input_keyboard:
@@ -180,6 +180,7 @@ forward_loop:
     stmfd sp!, {lr}
     mvn r6, r6
     mvn r7, r7
+    mov r0, #0
     bleq back_loop
     ldmfd sp!, {lr}
 
@@ -192,20 +193,25 @@ back_loop:
     add r4, r4, r6
     add r5, r5, r7
 
-    stmfd sp!, {lr, r1, r2}
+    stmfd sp!, {lr, r0, r1, r2}
     mov r1, r4
     mov r2, r5
     bl toOneD
-    ldmfd sp!, {lr, r1, r2}
-
     ldr r10, =Board
     add r10, r10, r0
     ldr r3, [r10]
+    ldmfd sp!, {lr, r0, r1, r2}
+
+    add r0, r0, #1
 
     cmp r4, r1
     bne back_loop
     cmpeq r5, r2
     bne back_loop
+    cmp r3, #'W
+    ldr r6, =wscore
+    ldr r6, [r6]
+    ldr r7, =bscore
     mov pc, lr
 
 
@@ -406,6 +412,25 @@ toOneD:
     ldmfd sp!, {lr, r4}
 
     mov pc, lr
+
+print_board:
+    cmp r1, #8
+    moveq pc, lr
+    cmp r2, #8
+    moveq r2, #0
+    addeq r1, r1, #1
+
+    stmfd sp!, {r1, r2}
+    bl toOneD
+    ldr r10, =Board
+    add r10, r10, r0
+    ldr r3, [r10]
+    add r0, r1, #1
+    add r1, r2, #1
+    swi SWI_DispChar
+    ldmfd sp!, {r1, r2}
+
+    add r2, r2, #1
 
     .data
     Board: .space 256

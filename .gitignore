@@ -1,5 +1,5 @@
-.vscode/*
-Lab3/Othello/.idea/*
+**/.vscode/*
+**/.idea/*
 
 *.docx    binary
 *.odt    binary
