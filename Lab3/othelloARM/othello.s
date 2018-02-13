@@ -153,32 +153,20 @@ main_end:
     swieq SWI_DispStr
 
 input_keyboard:
-    stmfd sp!, {lr}
-    mov r4, #0
-    mov r6, #0x1
-    swi SWI_Blue
-    cmp r0, r6 lsl r6
-    moveq r0, #0
-    cmp r0, #0x10
-    moveq r0, #1
-    cmp r0, #0x100
-    moveq r0, #2
-    cmp r0, #0x1000
-    moveq r0, #3
-    cmp r0, #0x10000
-    moveq r0, #4
-    cmp r0, #0x100000
-    moveq r0, #5
-    cmp r0, #0x1000000
-    moveq r0, #6
-    cmp r0, #0x10000000
-    moveq r0, #7
+    stmfd sp!, {r4, r5, r6}
     swi SWI_Black
     cmp r0, #1
     beq main
+    mov r4, #0
+    mov r5, #0
+    mov r6, #0x1
+    swi SWI_Blue
+    cmp r0, [r6, lsl r5]
+    moveq r0, r5
+    ldmfdeq sp!, {r4, r5, r6}
+    moveq pc, lr
     cmp r0, #0x0
     b input_keyboard
-    mov pc, lr
 
 othello:
     ldr r2, =board
