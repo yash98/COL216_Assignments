@@ -94,7 +94,7 @@ public class Othello {
         }
     }
 
-    public boolean move(int x, int y, char chance) {
+    public boolean moveIt(int x, int y, char chance) {
         int oneD = to1D(x, y);
         int tx, ty, mx, my;
         if (this.board[oneD] == 'P') {
@@ -172,6 +172,7 @@ public class Othello {
     }
 
     public static void main(String[] args) {
+        // init
         Othello game = new Othello();
         Scanner s = new Scanner(System.in);
         boolean prevNotStale = true;
@@ -179,14 +180,18 @@ public class Othello {
         boolean rightMove = false;
         int x, y;
         char prevChance = 'B';
+        // game begin
         while (game.movesDone <= 64) {
+            // swap chances
             if (prevChance == 'W') {
                 prevChance = 'B';
             } else {
                 prevChance = 'W';
             }
+            // update Stale
             prevNotStale = notStale;
             notStale = game.obtainPlaces(prevChance);
+            // check stale
             if (!(notStale || prevNotStale)) {
                 break;
             }
@@ -194,7 +199,9 @@ public class Othello {
                 game.clearP();
                 continue;
             }
+            // till right move
             while (!(rightMove)) {
+                // show score chance
                 System.out.println("Chance: " + prevChance);
                 game.display();
                 System.out.println("W Score: " + game.wScore);
@@ -203,7 +210,7 @@ public class Othello {
                 x = s.nextInt();
                 System.out.println("y: ");
                 y = s.nextInt();
-                rightMove = game.move(x, y, prevChance);
+                rightMove = game.moveIt(x, y, prevChance);
                 if (!rightMove) {
                     System.out.println("Wrong Place");
                 }

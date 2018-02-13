@@ -110,7 +110,6 @@ input_keyboard:
     beq preset
     cmp r0, #0x0
     b input_keyboard
-
     mov pc, lr
 
 move:
