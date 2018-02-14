@@ -28,8 +28,6 @@ public class Othello {
 
     public boolean obtainPlaces(char chance) {
         int oneD;
-        int mx;
-        int my;
         int tx;
         int ty;
         boolean anyPlace = false;
@@ -38,10 +36,8 @@ public class Othello {
                 oneD = to1D(x, y);
                 if (this.board[oneD] == 'W' || this.board[oneD] == 'B') {
                     for (int m=0; m<8; m++) {
-                        mx = moveArr[2*m];
-                        my = moveArr[2*m+1];
-                        tx = x+mx;
-                        ty = y+my;
+                        tx = y + moveArr[2*m];
+                        ty = x + moveArr[2*m+1];
                         oneD = to1D(tx, ty);
                         if (this.board[oneD] == '0') {
                             anyPlace |= checkPlace(tx, ty, chance);
@@ -69,6 +65,7 @@ public class Othello {
                         break;
                     }
                     if (this.board[oneD] == chance) {
+                        // itsPossible
                         possible = true;
                         oneD = to1D(x, y);
                         this.board[oneD] = 'P';
@@ -98,8 +95,10 @@ public class Othello {
         int oneD = to1D(x, y);
         int tx, ty, mx, my;
         if (this.board[oneD] == 'P') {
+            // OnP
             this.clearP();
             this.board[oneD] = chance;
+            // 1 score inc
             if (chance == 'W') {
                 this.wScore++;
             } else {
@@ -121,6 +120,7 @@ public class Othello {
                         while (!(tx==x && ty==y)) {
                             oneD = to1D(tx, ty);
                             this.board[oneD] = chance;
+                            // score exchange
                             if (chance == 'W') {
                                 this.wScore++;
                                 this.bScore--;
@@ -137,6 +137,7 @@ public class Othello {
                     ty += my;
                 }
             }
+            // successful move
             this.movesDone++;
             return true;
         } else {
