@@ -31,8 +31,8 @@ public class Othello {
         int tx;
         int ty;
         boolean anyPlace = false;
-        for (int x=0; x<8; x++) {
-            for (int y=0; y<8; y++) {
+        for (int y=0; y<8; y++) {
+            for (int x=0; x<8; x++) {
                 oneD = to1D(x, y);
                 if (this.board[oneD] == 'W' || this.board[oneD] == 'B') {
                     for (int m=0; m<8; m++) {
