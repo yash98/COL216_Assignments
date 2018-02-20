@@ -17,7 +17,7 @@ end entity;
 architecture beh of alu is
 begin
     process(a,b,operation)
-        begin
+    begin
         
         --Arithmetic
         --add   
@@ -68,5 +68,5 @@ begin
             result <= a xor b; 
         
         end if;
-end process;
+    end process;
 end architecture;
