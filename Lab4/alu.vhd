@@ -8,9 +8,10 @@ entity alu is
         a: in std_logic_vector(31 downto 0);
         b: in std_logic_vector(31 downto 0);
         operation: in std_logic_vector(3 downto 0);
-        carry: in std_logic;
+        carryIn: in std_logic;
         result: out std_logic_vector(31 downto 0);
         flags: out std_logic_vector(3 downto 0)
+        -- 3z 3n 2v 1c
     );    
 end entity;
 
@@ -31,13 +32,13 @@ begin
             result <= (not a) + b + "00000000000000000000000000000001";
         --adc    
         elsif (operation = "0101") then
-            result <= a + b + ("0000000000000000000000000000000" & carry );
+            result <= a + b + ("0000000000000000000000000000000" & carryIn);
         --sbc
         elsif (operation = "0110") then
-            result <= a + (not b) + ("0000000000000000000000000000000" & carry );
+            result <= a + (not b) + ("0000000000000000000000000000000" & carryIn);
         --rsc
         elsif (operation = "0111") then 
-            result <= (not a) + b + ("0000000000000000000000000000000" & carry );        
+            result <= (not a) + b + ("0000000000000000000000000000000" & carryIn);        
         
         --Logical
         --and
@@ -69,4 +70,11 @@ begin
         
         end if;
     end process;
+
+flags(3) <= "0" when result = "00000000000000000000000000000000" else
+            "1";
+flags(2) <= result(31);
+flags(0) <= a(30) xor b(30) xor result(30);
+flags(1) <= a(31) xor b(31) xor result(31) xor flags(0);
+
 end architecture;
