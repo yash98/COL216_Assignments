@@ -12,7 +12,7 @@ entity shifter is
         carry: out std_logic
     );   
     
-architecture beh of alu is
+architecture beh of shifter is
 begin
     process(a,b,operation)
     begin    

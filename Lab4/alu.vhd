@@ -11,7 +11,7 @@ entity alu is
         carryIn: in std_logic;
         result: out std_logic_vector(31 downto 0);
         flags: out std_logic_vector(3 downto 0)
-        -- 3z 3n 2v 1c
+        -- 3z 2n 1v 0c
     );    
 end entity;
 
