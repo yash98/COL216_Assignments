@@ -14,6 +14,8 @@ entity multipliter is
 end entity;
 
 architecture beh of multiplier is
+signal res: std_logic_vector (0 to 63);
 begin
-    s <= a*b;
+    res <= a*b;
+    s <= res(31 downto 0);
 end architecture;
