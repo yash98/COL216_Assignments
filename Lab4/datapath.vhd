@@ -230,4 +230,30 @@ end architecture;
 
 --DATAPATH
 
+--DATEPATH
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity datapath is
+    port (
+        PW: in std_logic;
+        IorD: in std_logic;
+        MR: in std_logic; --d
+        MW: in std_logic; --d
+        IW: in std_logic;
+        DW: in std_logic;
+        M2R: in std_logic;
+        Rsrc: in std_logic;
+        RW: in std_logic;
+        AW: in std_logic;
+        BW: in std_logic;
+        Asrc1: in std_logic;
+        Asrc2: in std_logic;
+        op: in std_logic_vector(3 downt 0);
+        Fset: in std_logic;
+        ReW: in std_logic;
+    );
+end entity;
 
