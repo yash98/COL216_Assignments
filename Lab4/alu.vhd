@@ -16,6 +16,7 @@ entity alu is
 end entity;
 
 architecture beh of alu is
+signal res: std_logic_vector (0 to 31);
 begin
     process(a,b,operation)
     begin
@@ -23,58 +24,61 @@ begin
         --Arithmetic
         --add   
         if (operation = "0100") then
-            result <= a + b;
+            res <= a + b;
         --sub    
         elsif (operation = "0010") then
-            result <= a + (not b) + "00000000000000000000000000000001";
+            res <= a + (not b) + "00000000000000000000000000000001";
         --rsb    
         elsif (operation = "0011") then
-            result <= (not a) + b + "00000000000000000000000000000001";
+            res <= (not a) + b + "00000000000000000000000000000001";
         --adc    
         elsif (operation = "0101") then
-            result <= a + b + ("0000000000000000000000000000000" & carryIn);
+            res <= a + b + ("0000000000000000000000000000000" & carryIn);
         --sbc
         elsif (operation = "0110") then
-            result <= a + (not b) + ("0000000000000000000000000000000" & carryIn);
+            res<= a + (not b) + ("0000000000000000000000000000000" & carryIn);
         --rsc
         elsif (operation = "0111") then 
-            result <= (not a) + b + ("0000000000000000000000000000000" & carryIn);        
+            res <= (not a) + b + ("0000000000000000000000000000000" & carryIn);        
         
         --Logical
         --and
         elsif (operation = "0000") then
-            result <= a and b;
+            res <= a and b;
         --orr
         elsif (operation = "1100") then
-            result <= a or b;
+            res <= a or b;
         --eor
         elsif (operation = "0001") then
-            result <= a xor b;        
+            res <= a xor b;        
         --bic
         elsif (operation = "1110") then
-            result <= a and (not b);
+            res <= a and (not b);
             
         --Test
         --cmp
         elsif (operation = "1010") then
-            result <= a + (not b) + "00000000000000000000000000000001";
+            res <= a + (not b) + "00000000000000000000000000000001";
         --cmn
         elsif (operation = "1011") then
-            result <= a + b;
+            res <= a + b;
         --tst
         elsif (operation = "1000") then
-            result <= a and b;
+            res <= a and b;
         --teq
         elsif (operation = "1001") then
-            result <= a xor b; 
+            res <= a xor b; 
         
         end if;
     end process;
 
-flags(3) <= "0" when result = "00000000000000000000000000000000" else
-            "1";
-flags(2) <= result(31);
-flags(0) <= a(30) xor b(30) xor result(30);
-flags(1) <= a(31) xor b(31) xor result(31) xor flags(0);
+result <= res;
+    
+with res select
+flags(3) <= '0' when "00000000000000000000000000000000",
+                     '1' when others;
+flags(2) <= res(31);
+flags(0) <= (a(30) xor b(30) xor res(30));
+flags(1) <= a(31) xor b(31) xor res(31) xor (a(30) xor b(30) xor res(30)); --a(31) xor b(31) xor res(31) xor flags(0)
 
 end architecture;

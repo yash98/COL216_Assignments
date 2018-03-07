@@ -21,7 +21,7 @@ entity reg_file is
     );
 end entity;
 
-architecture beh of reg_file is
+architecture behr of reg_file is
 signal r0: std_logic_vector(31 downto 0);
 signal r1: std_logic_vector(31 downto 0);
 signal r2: std_logic_vector(31 downto 0);
@@ -75,7 +75,7 @@ begin
 
     r15 <= "0000" when reset = '1';
 
-    process(rising_edge(clock))
+    process(clock'event)
     begin
         if (we = '1') then
             if (waddr = "0000") then
