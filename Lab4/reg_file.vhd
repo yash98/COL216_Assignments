@@ -75,41 +75,43 @@ begin
 
     r15 <= "0000" when reset = '1';
 
-    process(clock'event)
+    process(clock)
     begin
-        if (we = '1') then
-            if (waddr = "0000") then
-                r0 <= winp;
-            elsif (waddr = "0001") then
-                r1 <= winp;
-            elsif (waddr = "0010") then
-                r2 <= winp;
-            elsif (waddr = "0011") then
-                r3 <= winp;
-            elsif (waddr = "0100") then
-                r4 <= winp;
-            elsif (waddr = "0101") then
-                r5 <= winp;
-            elsif (waddr = "0110") then
-                r6 <= winp;
-            elsif (waddr = "0111") then
-                r7 <= winp;
-            elsif (waddr = "1000") then
-                r8 <= winp;
-            elsif (waddr = "1001") then
-                r9 <= winp;
-            elsif (waddr = "1010") then
-                r10 <= winp;
-            elsif (waddr = "1011") then
-                r11 <= winp;
-            elsif (waddr = "1100") then
-                r12 <= winp;
-            elsif (waddr = "1101") then
-                r13 <= winp;
-            elsif (waddr = "1110") then
-                r14 <= winp;
-            elsif (waddr = "1111") then
-                r15 <= winp;
+        if (rising_edge(clock))
+            if (we = '1') then
+                if (waddr = "0000") then
+                    r0 <= winp;
+                elsif (waddr = "0001") then
+                    r1 <= winp;
+                elsif (waddr = "0010") then
+                    r2 <= winp;
+                elsif (waddr = "0011") then
+                    r3 <= winp;
+                elsif (waddr = "0100") then
+                    r4 <= winp;
+                elsif (waddr = "0101") then
+                    r5 <= winp;
+                elsif (waddr = "0110") then
+                    r6 <= winp;
+                elsif (waddr = "0111") then
+                    r7 <= winp;
+                elsif (waddr = "1000") then
+                    r8 <= winp;
+                elsif (waddr = "1001") then
+                    r9 <= winp;
+                elsif (waddr = "1010") then
+                    r10 <= winp;
+                elsif (waddr = "1011") then
+                    r11 <= winp;
+                elsif (waddr = "1100") then
+                    r12 <= winp;
+                elsif (waddr = "1101") then
+                    r13 <= winp;
+                elsif (waddr = "1110") then
+                    r14 <= winp;
+                elsif (waddr = "1111") then
+                    r15 <= winp;
+                end if;
             end if;
         end if;
     end process;

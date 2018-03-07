@@ -14,7 +14,7 @@ entity multiplier is
 end entity;
 
 architecture behm of multiplier is
-signal res: std_logic_vector (0 to 63);
+signal res: std_logic_vector (63 downto 0);
 begin
     res <= a*b;
     s <= res(31 downto 0);
