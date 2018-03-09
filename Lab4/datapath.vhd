@@ -32,6 +32,8 @@ entity datapath is
         
         shiftSrc: in std_logic_vector(1 downto 0);
         amtSrc: in std_logic_vector(1 downto 0);
+        wadsrc: in std_logic_vector(1 downto 0);
+        rad1src: in std_logic_vector(0 downto 0);
         
         
         pc_out: out std_logic_vector(31 downto 0);
@@ -75,6 +77,9 @@ signal IorD_out: std_logic_vector(31 downto 0);
 signal pc_o: std_logic_vector(31 downto 0);
 signal mul_out: std_logic_vector(31 downto 0);
 
+signal wadsrc_out: std_logic_vector(3 downto 0);
+signal rad1src_out: std_logic_vector(3 downto 0);
+
 begin
 -- components
 ALU: entity work.alu port map (
@@ -88,14 +93,13 @@ ALU: entity work.alu port map (
 );
 
 RF: entity work.reg_file port map (
-    raddr1 => ins(19 downto 16),
+    raddr1 => rad1src_out,
     raddr2 => Rsrc_out,
     winp => m2r_out,
-    waddr => ins(15 downto 0),
+    waddr => wadsrc_out,
     we => RW,
     clock => clock,
     reset => pc_reset,
-    pc_set => PW,
 
     pc => pc_o,
     rout1 => rd1_out,
@@ -130,12 +134,14 @@ MUL: entity work.multiplier port map (
 -- all muxes
 -- shifter mux
 shiftSrc_out <= B_out when shiftSrc = "00" else
-                "000000000000000000000000" & ins(7 downto 0);
+                "000000000000000000000000" & ins(7 downto 0) when shiftSrc = "01" else
+                ins(23 downto 0);
                 
 -- amt mux
-amtSrc_out <= "00000" when amtSrc = "00" else
-                X_out(4 downto 0) when amtSrc = "01" else
-                ins(11 downto 7) when amtSrc = "10";
+amtSrc_out <= X_out(4 downto 0) when amtSrc = "00" else
+                "00010" when amtSrc = "01" else
+                ins(11 downto 7) when amtSrc = "10" else
+                ins(11 downto 7) when amtSrc = "11";
 
 -- Asrc2 mux
 Asrc2_out <= shifter_out when Asrc2 = "00" else
@@ -158,7 +164,13 @@ Rsrc_out <= ins(3 downto 0) when Rsrc = "0" else
 m2r_out <= dr_out when dr = "0" else
             RES_out;
             
+-- wadsrc mux
+wadsrc_out <= ins(15 downto 11) when wadsrc = "00" else
+                ins(19 downto 16) when wadsrc = "01" else
+                "01111";
 
+-- rad1src 
+rad1src_out <= ins(19 downto 16) when rad1src = "0" else ins(15 downto 12);
 
 -- datapath internal registers
 -- flags registers

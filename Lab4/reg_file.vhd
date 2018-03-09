@@ -14,7 +14,6 @@ entity reg_file is
         we: in std_logic;
         clock: in std_logic;
         reset: in std_logic;
-        pc_set: in std_logic;
 
         pc: out std_logic_vector(31 downto 0);
         rout1: out std_logic_vector(31 downto 0);
@@ -42,8 +41,6 @@ begin
     process(clock)
     begin
         if (rising_edge(clock)) then
-            if (pc_set = '1') then
-                r(15) <= winp;
             elsif (we = '1') then
                 r(waddr_in) <= winp;
             end if;
