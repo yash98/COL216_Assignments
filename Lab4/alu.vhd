@@ -11,6 +11,7 @@ entity alu is
         b: in std_logic_vector(31 downto 0);
         operation: in std_logic_vector(3 downto 0);
         carryIn: in std_logic;
+        c_in_from_shifter: in std_logic;
         result: out std_logic_vector(31 downto 0);
         flags: out std_logic_vector(3 downto 0)
         -- 3z 2n 1v 0c
@@ -122,6 +123,6 @@ flags(3) <= '0' when "00000000000000000000000000000000",
                      '1' when others;
 flags(2) <= res(31);
 flags(1) <= c31 xor c32;
-flags(0) <= c32;
+flags(0) <= c32 when (not (operation = "1101") and not(operation = "1111")) else c_in_from_shifter;
 
 end architecture;

@@ -8,7 +8,7 @@ entity shifter is
         a: in std_logic_vector(31 downto 0);
         result: out std_logic_vector(31 downto 0);
         typ: in std_logic_vector(1 downto 0);
-        amt: in unsigned(4 downto 0);
+        amt: in std_logic_vector(4 downto 0);
         carry: out std_logic
     );   
 end entity;
@@ -18,7 +18,7 @@ signal zero: std_logic_vector (0 to 31) := "00000000000000000000000000000000";
 signal one: std_logic_vector (0 to 31) := "11111111111111111111111111111111";
 signal amnt: integer;
 begin
-    amnt <= conv_integer(amt);
+    amnt <= conv_integer(unsigned(amt));
     process(a,typ,amt)
     begin
         amnt <= conv_integer(amt);

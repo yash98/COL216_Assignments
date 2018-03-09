@@ -14,6 +14,7 @@ entity reg_file is
         we: in std_logic;
         clock: in std_logic;
         reset: in std_logic;
+        pc_set: in std_logic;
 
         pc: out std_logic_vector(31 downto 0);
         rout1: out std_logic_vector(31 downto 0);
@@ -21,7 +22,7 @@ entity reg_file is
     );
 end entity;
 
-architecture behr of reg_file is
+architecture beh of reg_file is
 type reg_arr is array (0 to 15) of std_logic_vector(31 downto 0);
 signal r: reg_arr;
 signal raddr1_in: integer;
@@ -41,7 +42,9 @@ begin
     process(clock)
     begin
         if (rising_edge(clock)) then
-            if (we = '1') then
+            if (pc_set = '1') then
+                r(15) <= winp;
+            elsif (we = '1') then
                 r(waddr_in) <= winp;
             end if;
         end if;
