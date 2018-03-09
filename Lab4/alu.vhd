@@ -19,8 +19,6 @@ end entity;
 
 architecture beh of alu is
 signal res: std_logic_vector (0 to 31);
-signal a31_in: std_logic;
-signal b31_in: std_logic;
 signal c31: std_logic;
 signal c32: std_logic;
 begin
@@ -42,7 +40,7 @@ begin
         elsif (operation = "0011") then
             res <= (not a) + b + "00000000000000000000000000000001";
             c31 <= ((not (a(31)) xor b(31)) xor res(31));
-            c32 <= ((not (a(31)) and b(31)) or ((not (a(31))) and c(31)) or (b(31) and c(31)));
+            c32 <= ((not (a(31)) and b(31)) or ((not (a(31))) and c31) or (b(31) and c31));
         --adc    
         elsif (operation = "0101") then
             res <= a + b + ("0000000000000000000000000000000" & carryIn);
@@ -58,6 +56,7 @@ begin
             res <= (not a) + b + ("0000000000000000000000000000000" & carryIn);
             c31 <= (((not a(31)) xor b(31)) xor res(31));
             c32 <= ((not a(31)) and b(31)) or ((not a(31)) and c31) or (b(31) and c31);
+        
         --Logical
         --and
         elsif (operation = "0000") then
@@ -79,6 +78,7 @@ begin
             res <= a and (not b);
             c31 <= ((a(31) xor (not b(31))) xor res(31));
             c32 <= (a(31) and (not b(31))) or (a(31) and c31) or ((not b(31)) and c31);
+        
         --Test
         --cmp
         elsif (operation = "1010") then
@@ -98,6 +98,18 @@ begin
         --teq
         elsif (operation = "1001") then
             res <= a xor b; 
+            c31 <= '0';
+            c32 <= '0';
+        
+        --Move
+        --mov
+        elsif (operation = "1101") then
+            res <= b;
+            c31 <= '0';
+            c32 <= '0';
+        --mvn
+        elsif (operation = "1111") then
+            res <= (not b);
             c31 <= '0';
             c32 <= '0';
         end if;
