@@ -36,13 +36,13 @@ begin
         --sub    
         elsif (operation = "0010") then
             res <= a + (not b) + "00000000000000000000000000000001";
-            c31 <= ((a(31) xor (not b(31)))) xor res(31));
+            c31 <= ((a(31) xor (not b(31))) xor res(31));
             c32 <= (a(31) and (not b(31))) or (a(31) and c31) or ((not b(31)) and c31);
         --rsb    
         elsif (operation = "0011") then
             res <= (not a) + b + "00000000000000000000000000000001";
             c31 <= ((not (a(31)) xor b(31)) xor res(31));
-            c32 <= ((not (a(31)) and b(31)) or ((not (a(31)) and c31) or (b(31) and c31);
+            c32 <= ((not (a(31)) and b(31)) or ((not (a(31))) and c(31)) or (b(31) and c(31)));
         --adc    
         elsif (operation = "0101") then
             res <= a + b + ("0000000000000000000000000000000" & carryIn);
