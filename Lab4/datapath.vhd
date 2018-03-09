@@ -19,7 +19,7 @@ entity datapath is
         AW: in std_logic;  -- rf out1 store reg write enable
         BW: in std_logic;  -- rf out2 store B reg write enable
         XW: in std_logic;  -- rf out2 store X reg write enable
-        Asrc1: in std_logic_vector(2 downto 0); -- pick pc for inc. or rf out1 for calc
+        Asrc1: in std_logic_vector(0 downto 0); -- pick pc for inc. or rf out1 for calc
         Asrc2: in std_logic_vector(4 downto 0); -- choose from rf out 2 or 4 (for pc+4 step) or Imm or offset for branch
         op: in std_logic_vector(3 downto 0);  -- op code for alu
         Fset: in std_logic; -- set flags along command
@@ -30,7 +30,8 @@ entity datapath is
         clock: in std_logic;
         pc_reset: in std_logic; -- for reg_file pc <= 0
         
-        shiftSrc: in std_logic;
+        shiftSrc: in std_logic_vector(1 downto 0);
+        amtSrc: in std_logic_vector(1 downto 0);
         
         
         pc_out: out std_logic_vector(31 downto 0);
@@ -52,8 +53,8 @@ signal F: std_logic_vector(4 downto 0);
 signal ins: std_logic_vector(31 downto 0);
 signal mem_out: std_logic_vector(31 downto 0);
 signal dr_out: std_logic_vector(31 downto 0);
-signal M2R_choose: std_logic_vector(31 downto 0);
-signal Rsrc_choose: std_logic_vector(3 downto 0);
+signal M2R_out: std_logic_vector(31 downto 0);
+signal Rsrc_out: std_logic_vector(3 downto 0);
 signal rd1_out: std_logic_vector(31 downto 0);
 signal rd2_out: std_logic_vector(31 downto 0);
 signal A_out: std_logic_vector(31 downto 0);
@@ -70,8 +71,9 @@ signal shifter_out: std_logic_vector(31 downto 0);
 signal b_off_out: std_logic_vector(31 downto 0);
 signal four: std_logic_vector(31 downto 0):= "00000000000000000000000000000100";
 signal res_out: std_logic_vector(31 downto 0);
-signal lorD_out: std_logic_vector(31 downto 0);
+signal IorD_out: std_logic_vector(31 downto 0);
 signal pc_o: std_logic_vector(31 downto 0);
+signal mul_out: std_logic_vector(31 downto 0);
 
 begin
 -- components
@@ -87,8 +89,8 @@ ALU: entity work.alu port map (
 
 RF: entity work.reg_file port map (
     raddr1 => ins(19 downto 16),
-    raddr2 => Rsrc_choose,
-    winp => m2r_choose,
+    raddr2 => Rsrc_out,
+    winp => m2r_out,
     waddr => ins(15 downto 0),
     we => RW,
     clock => clock,
@@ -102,7 +104,7 @@ RF: entity work.reg_file port map (
 pc_out <= pc_o;
 
 MEM: entity work.memory_block_wrapper port map (
-    BRAM_PORTA_0_addr => lorD_out,
+    BRAM_PORTA_0_addr => IorD_out,
     BRAM_PORTA_0_clk => clock,
     BRAM_PORTA_0_din => B_out,
     BRAM_PORTA_0_dout => mem_out,
@@ -118,13 +120,45 @@ SHIFTER: entity work.shifter port map (
     carry => c_from_shifter
 );
 
-
+MUL: entity work.multiplier port map (
+    a => B_out,
+    b => X_out,
+    s => mul_out
+);
 
 
 -- all muxes
 -- shifter mux
-shiftSrc_out <= B_out when shiftSrc = '0' else
+shiftSrc_out <= B_out when shiftSrc = "00" else
                 "000000000000000000000000" & ins(7 downto 0);
+                
+-- amt mux
+amtSrc_out <= "00000" when amtSrc = "00" else
+                X_out(4 downto 0) when amtSrc = "01" else
+                ins(11 downto 7) when amtSrc = "10";
+
+-- Asrc2 mux
+Asrc2_out <= shifter_out when Asrc2 = "00" else
+                four when Asrc2 = "01" else
+                mul_out;
+
+-- Asrc1 mux
+Asrc1_out <= pc_o when Asrc1 = "0" else
+                A_out;
+                
+-- IorD mux
+IorD_out <= alu_out when IorD = "0" else
+            pc_o;
+            
+-- Rsrc mux
+Rsrc_out <= ins(3 downto 0) when Rsrc = "0" else
+            ins(15 downto 12);
+            
+-- m2r mux
+m2r_out <= dr_out when dr = "0" else
+            RES_out;
+            
+
 
 -- datapath internal registers
 -- flags registers
