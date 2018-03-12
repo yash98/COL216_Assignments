@@ -49,7 +49,7 @@ signal RES: std_logic_vector(31 downto 0);
 signal A: std_logic_vector(31 downto 0);
 signal B: std_logic_vector(31 downto 0);
 signal X: std_logic_vector(31 downto 0);
-signal F: std_logic_vector(4 downto 0);
+signal F: std_logic_vector(3 downto 0);
 
 -- connections
 signal ins: std_logic_vector(31 downto 0);
@@ -79,6 +79,7 @@ signal mul_out: std_logic_vector(31 downto 0);
 
 signal wadsrc_out: std_logic_vector(3 downto 0);
 signal rad1src_out: std_logic_vector(3 downto 0);
+signal MW_bus: std_logic_vector(3 downto 0);
 
 begin
 -- components
@@ -107,13 +108,14 @@ RF: entity work.reg_file port map (
 );
 pc_out <= pc_o;
 
+MW_bus <= MW & MW & MW & MW;
 MEM: entity work.memory_block_wrapper port map (
     BRAM_PORTA_0_addr => IorD_out,
     BRAM_PORTA_0_clk => clock,
     BRAM_PORTA_0_din => B_out,
     BRAM_PORTA_0_dout => mem_out,
     BRAM_PORTA_0_en => '1',
-    BRAM_PORTA_0_we => MW
+    BRAM_PORTA_0_we => MW_bus
 );
 
 SHIFTER: entity work.shifter port map (
@@ -135,7 +137,7 @@ MUL: entity work.multiplier port map (
 -- shifter mux
 shiftSrc_out <= B_out when shiftSrc = "00" else
                 "000000000000000000000000" & ins(7 downto 0) when shiftSrc = "01" else
-                ins(23 downto 0);
+                "00000000" & ins(23 downto 0);
                 
 -- amt mux
 amtSrc_out <= X_out(4 downto 0) when amtSrc = "00" else
@@ -165,9 +167,9 @@ m2r_out <= dr_out when dr = "0" else
             RES_out;
             
 -- wadsrc mux
-wadsrc_out <= ins(15 downto 11) when wadsrc = "00" else
+wadsrc_out <= ins(15 downto 12) when wadsrc = "00" else
                 ins(19 downto 16) when wadsrc = "01" else
-                "01111";
+                "1111";    
 
 -- rad1src 
 rad1src_out <= ins(19 downto 16) when rad1src = "0" else ins(15 downto 12);
