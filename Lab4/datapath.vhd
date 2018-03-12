@@ -50,7 +50,7 @@ signal A: std_logic_vector(31 downto 0);
 signal B: std_logic_vector(31 downto 0);
 signal X: std_logic_vector(31 downto 0);
 signal F: std_logic_vector(3 downto 0);
-
+ 
 -- connections
 signal ins: std_logic_vector(31 downto 0);
 signal mem_out: std_logic_vector(31 downto 0);
