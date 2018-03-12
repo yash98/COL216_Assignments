@@ -41,8 +41,8 @@ begin
     process(clock)
     begin
         if (rising_edge(clock)) then
-            elsif (we = '1') then
-                r(waddr_in) <= winp;
+            if (we = '1') then
+            r(waddr_in) <= winp;
             end if;
         end if;
     end process;
