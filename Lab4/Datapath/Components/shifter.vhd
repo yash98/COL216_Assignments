@@ -16,12 +16,11 @@ end entity;
 architecture beha of shifter is
 signal zero: std_logic_vector (0 to 31) := "00000000000000000000000000000000";
 signal one: std_logic_vector (0 to 31) := "11111111111111111111111111111111";
-signal amnt: integer;
+signal amnt: integer:= 0;
 begin
-    amnt <= conv_integer(unsigned(amt));
     process(a,typ,amt)
     begin
-        amnt <= conv_integer(amt);
+        amnt <= conv_integer(unsigned(amt));
         if (amnt>0 and amnt<32) then
             --lsl    
             if (typ = "00") then 
