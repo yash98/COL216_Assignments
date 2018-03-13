@@ -14,17 +14,18 @@ entity Bctrl is
 end entity;
 
 architecture beh of Bctrl is
-signal z: std_logic;
-signal n: std_logic;
-signal v: std_logic;
-signal c: std_logic;
+signal z: std_logic := '0';
+signal n: std_logic := '0';
+signal v: std_logic := '0';
+signal c: std_logic := '0';
 begin
-    z <= znvc(3);
-    n <= znvc(2);
-    v <= znvc(1);
-    c <= znvc(0);
     process(ins31_28,znvc)
     begin
+        z <= znvc(3);
+        n <= znvc(2);
+        v <= znvc(1);
+        c <= znvc(0);
+    
         if(ins31_28 = "0000" and (z='1') ) then p<='1';
         elsif(ins31_28 = "0001" and (not(z)='1')) then p<='1';
         elsif(ins31_28 = "0010" and (c='1')) then p<='1';
@@ -40,18 +41,7 @@ begin
         elsif(ins31_28 = "1100" and ( ((not(z)) and (not(n xor v))) = '1')) then p<='1';
         elsif(ins31_28 = "1101" and ( not((not(z)) and (not(n xor v))) = '1')) then p<='1';
         elsif(ins31_28 = "1110") then p<='1';
+        
         end if;
-    end process;
-end architecture;
- 
-        
-        
-        
-        
-        
-        
-        
-        
-            
     end process;
 end architecture;
