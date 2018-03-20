@@ -7,6 +7,7 @@ library UNISIM;
 entity main_control is
     port (
         p: in std_logic;
+        clock: in std_logic;
 
         ins27_20: in std_logic_vector(7 downto 0);
         Rsrc: out std_logic;
@@ -20,10 +21,11 @@ entity main_control is
 end entity;
 
 architecture beh of main_control is
-signal state: integer := 0; --0=fetch, 1=rdAB, 2=arith, 3=addr, 4=brn, 5=wrRF, 6= wrM, 7=rdM, 8= M2RF
+signal state: integer := 0; --0=fetch, 1=rdAB, 2=arith, 3=addr, 4=brn, 5=wrRF, 6=wrM, 7=rdM, 8=M2RF
 begin
-    process(p,ins27_20)
-        begin
+    process(clock)
+    begin
+        if(rising_edge(clock)) then
             if(state = 0) then
                 state <= 1;
             elsif(state = 1) then
@@ -53,6 +55,7 @@ begin
             elsif(state =8) then
                 state <=0;                
             end if;
+        end if;
     end process;    
 end architecture;
 

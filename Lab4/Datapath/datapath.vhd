@@ -10,7 +10,7 @@ entity datapath is
         -- figure defined inputs from controller
         PW: in std_logic;   -- write to pc when 1
         IorD: in std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
-        MW: in std_logic_vector(0 downto 0); -- memory write enable, vector required for wrappper
+        MW: in std_logic_vector (3 downto 0); -- memory write enable, vector required for wrappper
         IW: in std_logic; -- Instruction write/save enable
         DW: in std_logic; -- data register write enable
         M2R: in std_logic_vector(1 downto 0); -- pick data or result to write to register file
@@ -79,7 +79,6 @@ signal mul_out: std_logic_vector(31 downto 0);
 
 signal wadsrc_out: std_logic_vector(3 downto 0);
 signal rad1src_out: std_logic_vector(3 downto 0);
-signal MW_bus: std_logic_vector(3 downto 0);
 
 begin
 -- components
@@ -108,14 +107,13 @@ RF: entity work.reg_file port map (
 );
 pc_out <= pc_o;
 
-MW_bus <= MW & MW & MW & MW;
 MEM: entity work.memory_block_wrapper port map (
     BRAM_PORTA_0_addr => IorD_out,
     BRAM_PORTA_0_clk => clock,
     BRAM_PORTA_0_din => B_out,
     BRAM_PORTA_0_dout => mem_out,
     BRAM_PORTA_0_en => '1',
-    BRAM_PORTA_0_we => MW_bus
+    BRAM_PORTA_0_we => MW
 );
 
 SHIFTER: entity work.shifter port map (
@@ -137,7 +135,8 @@ MUL: entity work.multiplier port map (
 -- shifter mux
 shiftSrc_out <= B_out when shiftSrc = "00" else
                 "000000000000000000000000" & ins(7 downto 0) when shiftSrc = "01" else
-                "00000000" & ins(23 downto 0);
+                "00000000" & ins(23 downto 0) when ins(23) = '0' else
+                "11111111" & ins(23 downto 0);
                 
 -- amt mux
 amtSrc_out <= X_out(4 downto 0) when amtSrc = "00" else
@@ -169,7 +168,8 @@ m2r_out <= dr_out when dr = "0" else
 -- wadsrc mux
 wadsrc_out <= ins(15 downto 12) when wadsrc = "00" else
                 ins(19 downto 16) when wadsrc = "01" else
-                "1111";    
+                "1111" when wadsrc = "10" else
+                "1110";
 
 -- rad1src 
 rad1src_out <= ins(19 downto 16) when rad1src = "0" else ins(15 downto 12);
