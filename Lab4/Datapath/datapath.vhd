@@ -10,7 +10,6 @@ entity datapath is
         -- figure defined inputs from controller
         PW: in std_logic;   -- write to pc when 1
         IorD: in std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
-        MW: in std_logic_vector (3 downto 0); -- memory write enable, vector required for wrappper
         IW: in std_logic; -- Instruction write/save enable
         DW: in std_logic; -- data register write enable
         M2R: in std_logic_vector(1 downto 0); -- pick data or result to write to register file
@@ -34,6 +33,9 @@ entity datapath is
         amtSrc: in std_logic_vector(1 downto 0);
         wadsrc: in std_logic_vector(1 downto 0);
         rad1src: in std_logic_vector(0 downto 0);
+        
+        typ_dt: in std_logic_vector(3 downto 0);
+        byte_off: in std_logic_vector(1 downto 0);
         
         
         pc_out: out std_logic_vector(31 downto 0);
@@ -80,6 +82,10 @@ signal mul_out: std_logic_vector(31 downto 0);
 signal wadsrc_out: std_logic_vector(3 downto 0);
 signal rad1src_out: std_logic_vector(3 downto 0);
 
+signal MW: std_logic_vector(3 downto 0);
+signal data_to_mem_int: std_logic_vector(31 downto 0);
+signal data_to_reg_int: std_logic_vector(31 downto 0);
+
 begin
 -- components
 ALU: entity work.alu port map (
@@ -110,7 +116,7 @@ pc_out <= pc_o;
 MEM: entity work.memory_block_wrapper port map (
     BRAM_PORTA_0_addr => IorD_out,
     BRAM_PORTA_0_clk => clock,
-    BRAM_PORTA_0_din => B_out,
+    BRAM_PORTA_0_din => data_to_mem_int,
     BRAM_PORTA_0_dout => mem_out,
     BRAM_PORTA_0_en => '1',
     BRAM_PORTA_0_we => MW
@@ -130,6 +136,17 @@ MUL: entity work.multiplier port map (
     s => mul_out
 );
 
+P2M: entity work.pmpath port map (
+    type_of_dt => typ_dt,
+    byte_offset => byte_off,
+    data_from_reg => B_out,
+    data_from_mem => dr_out,
+    
+    
+    data_to_mem => data_to_mem_int,
+    data_to_reg => data_to_reg_int,
+    mem_write_en => MW
+);
 
 -- all muxes
 -- shifter mux
@@ -162,7 +179,7 @@ Rsrc_out <= ins(3 downto 0) when Rsrc = "0" else
             ins(15 downto 12);
             
 -- m2r mux
-m2r_out <= dr_out when dr = "0" else
+m2r_out <= data_to_reg_int when dr = "0" else
             RES_out;
             
 -- wadsrc mux
