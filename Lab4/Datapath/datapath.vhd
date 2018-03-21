@@ -10,8 +10,8 @@ entity datapath is
         -- figure defined inputs from controller
         PW: in std_logic;   -- write to pc when 1
         IorD: in std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
-        IW: in std_logic; -- Instruction write/save enable
-        DW: in std_logic; -- data register write enable
+        IRW: in std_logic; -- Instruction write/save enable
+        DRW: in std_logic; -- data register write enable
         M2R: in std_logic_vector(1 downto 0); -- pick data or result to write to register file
         Rsrc: in std_logic_vector(1 downto 0); -- pick rd or rm for rad2
         RW: in std_logic; -- write enable for register file
@@ -37,6 +37,8 @@ entity datapath is
         typ_dt: in std_logic_vector(3 downto 0);
         byte_off: in std_logic_vector(1 downto 0);
         
+        CW: in std_logic;
+        DW: in std_logic;
         
         pc_out: out std_logic_vector(31 downto 0);
         Flags: out std_logic_vector(3 downto 0)
@@ -50,25 +52,22 @@ signal DR: std_logic_vector(31 downto 0);
 signal RES: std_logic_vector(31 downto 0);
 signal A: std_logic_vector(31 downto 0);
 signal B: std_logic_vector(31 downto 0);
+signal C: std_logic;
+signal D: std_logic_vector(31 downto 0);
 signal X: std_logic_vector(31 downto 0);
 signal F: std_logic_vector(3 downto 0);
  
 -- connections
-signal ins: std_logic_vector(31 downto 0);
 signal mem_out: std_logic_vector(31 downto 0);
-signal dr_out: std_logic_vector(31 downto 0);
 signal M2R_out: std_logic_vector(31 downto 0);
 signal Rsrc_out: std_logic_vector(3 downto 0);
 signal rd1_out: std_logic_vector(31 downto 0);
 signal rd2_out: std_logic_vector(31 downto 0);
-signal A_out: std_logic_vector(31 downto 0);
-signal B_out: std_logic_vector(31 downto 0);
-signal X_out: std_logic_vector(31 downto 0);
 signal Asrc1_out: std_logic_vector(31 downto 0);
 signal Asrc2_out: std_logic_vector(31 downto 0);
 signal c_from_shifter: std_logic;
 signal alu_out: std_logic_vector(31 downto 0);
-signal f_out: std_logic_vector(3 downto 0);
+signal alu_f_out: std_logic_vector(3 downto 0);
 signal shiftSrc_out: std_logic_vector(31 downto 0);
 signal amtSrc_out: std_logic_vector(4 downto 0);
 signal shifter_out: std_logic_vector(31 downto 0);
@@ -95,7 +94,7 @@ ALU: entity work.alu port map (
     carryIn => cin,
     c_in_from_shifter => c_from_shifter,
     result => alu_out,
-    flags => f_out
+    flags => alu_f_out
 );
 
 RF: entity work.reg_file port map (
@@ -106,7 +105,9 @@ RF: entity work.reg_file port map (
     we => RW,
     clock => clock,
     reset => pc_reset,
-
+    
+    pc_we => PW,
+    pc_write => alu_out,
     pc => pc_o,
     rout1 => rd1_out,
     rout2 => rd2_out
@@ -125,22 +126,22 @@ MEM: entity work.memory_block_wrapper port map (
 SHIFTER: entity work.shifter port map (
     a => shiftSrc_out,
     result => shifter_out,
-    typ => ins(6 downto 5),
+    typ => IR(6 downto 5),
     amt => amtSrc_out,
     carry => c_from_shifter
 );
 
 MUL: entity work.multiplier port map (
-    a => B_out,
-    b => X_out,
+    a => B,
+    b => X,
     s => mul_out
 );
 
 P2M: entity work.pmpath port map (
     type_of_dt => typ_dt,
     byte_offset => byte_off,
-    data_from_reg => B_out,
-    data_from_mem => dr_out,
+    data_from_reg => B,
+    data_from_mem => DR,
     
     
     data_to_mem => data_to_mem_int,
@@ -149,17 +150,17 @@ P2M: entity work.pmpath port map (
 );
 
 -- all muxes
--- shifter mux
-shiftSrc_out <= B_out when shiftSrc = "00" else
-                "000000000000000000000000" & ins(7 downto 0) when shiftSrc = "01" else
-                "00000000" & ins(23 downto 0) when ins(23) = '0' else
-                "11111111" & ins(23 downto 0);
+-- shift mux
+shiftSrc_out <= B when shiftSrc = "00" else
+                "000000000000000000000000" & IR(7 downto 0) when shiftSrc = "01" else
+                "00000000" & IR(23 downto 0) when IR(23) = '0' else
+                "11111111" & IR(23 downto 0);
                 
 -- amt mux
-amtSrc_out <= X_out(4 downto 0) when amtSrc = "00" else
+amtSrc_out <= X(4 downto 0) when amtSrc = "00" else
                 "00010" when amtSrc = "01" else
-                ins(11 downto 7) when amtSrc = "10" else
-                ins(11 downto 7) when amtSrc = "11";
+                IR(11 downto 7) when amtSrc = "10" else
+                IR(11 downto 7) when amtSrc = "11";
 
 -- Asrc2 mux
 Asrc2_out <= shifter_out when Asrc2 = "00" else
@@ -168,50 +169,47 @@ Asrc2_out <= shifter_out when Asrc2 = "00" else
 
 -- Asrc1 mux
 Asrc1_out <= pc_o when Asrc1 = "0" else
-                A_out;
+                A;
                 
 -- IorD mux
 IorD_out <= alu_out when IorD = "0" else
             pc_o;
             
 -- Rsrc mux
-Rsrc_out <= ins(3 downto 0) when Rsrc = "0" else
-            ins(15 downto 12);
+Rsrc_out <= IR(3 downto 0) when Rsrc = "0" else
+            IR(15 downto 12);
             
 -- m2r mux
 m2r_out <= data_to_reg_int when dr = "0" else
-            RES_out;
+            RES;
             
 -- wadsrc mux
-wadsrc_out <= ins(15 downto 12) when wadsrc = "00" else
-                ins(19 downto 16) when wadsrc = "01" else
+wadsrc_out <= IR(15 downto 12) when wadsrc = "00" else
+                IR(19 downto 16) when wadsrc = "01" else
                 "1111" when wadsrc = "10" else
                 "1110";
 
 -- rad1src 
-rad1src_out <= ins(19 downto 16) when rad1src = "0" else ins(15 downto 12);
+rad1src_out <= IR(19 downto 16) when rad1src = "0" else IR(15 downto 12);
 
 -- datapath internal registers
 -- flags registers
-F <= f_out when Fset = '1';
+F <= alu_f_out when Fset = '1';
 Flags <= F;
 
 -- RES reg set
 RES <= alu_out when ReW = '1';
-res_out <= RES;
 
 --  A and B and X reg
 A <= rd1_out when AW = '1';
 B <= rd2_out when BW = '1';
 X <= rd2_out when XW = '1';
-A_out <= A;
-B_out <= B;
-X_out <= X;
+
+C <= c_from_shifter when CW = '1';
+D <= shifter_out when DW = '1';
 
 -- IR and DR reg
-IR <= mem_out when IW = '1';
-ins <= IR;
-DR <= mem_out when DW = '1';
-dr_out <= DR;
+IR <= mem_out when IRW = '1';
+DR <= mem_out when DRW = '1';
 
 end architecture;
