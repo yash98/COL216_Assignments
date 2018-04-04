@@ -41,6 +41,7 @@ entity datapath is
         DW: in std_logic;
         
         pc_out: out std_logic_vector(31 downto 0);
+        instruction: out std_logic_vector(31 downto 0);
         Flags: out std_logic_vector(3 downto 0)
     );
 end entity;
@@ -159,8 +160,8 @@ shiftSrc_out <= B when shiftSrc = "00" else
 -- amt mux
 amtSrc_out <= X(4 downto 0) when amtSrc = "00" else
                 "00010" when amtSrc = "01" else
-                IR(11 downto 7) when amtSrc = "10" else
-                IR(11 downto 7) when amtSrc = "11";
+                IR(11 downto 7) when amtSrc = "11" else
+                IR(11 downto 8) & "0" when amtSrc = "11";
 
 -- Asrc2 mux
 Asrc2_out <= shifter_out when Asrc2 = "00" else
@@ -172,8 +173,8 @@ Asrc1_out <= pc_o when Asrc1 = "0" else
                 A;
                 
 -- IorD mux
-IorD_out <= alu_out when IorD = "0" else
-            pc_o;
+IorD_out <= pc_o when IorD = "0" else
+            RES;
             
 -- Rsrc mux
 Rsrc_out <= IR(3 downto 0) when Rsrc = "0" else
@@ -198,7 +199,7 @@ F <= alu_f_out when Fset = '1';
 Flags <= F;
 
 -- RES reg set
-RES <= alu_out when ReW = '1';
+RES <= alu_out when rising_edge(ReW);
 
 --  A and B and X reg
 A <= rd1_out when AW = '1';
@@ -212,4 +213,6 @@ D <= shifter_out when DW = '1';
 IR <= mem_out when IRW = '1';
 DR <= mem_out when DRW = '1';
 
+
+instruction <= IR;
 end architecture;
