@@ -95,8 +95,30 @@ begin
             elsif(state = 7) then
                 state <= 8;
                 
-            elsif(state = 
+            elsif(state = 8) then 
+                state <= 1;
+                
+            elsif(state = 9) then 
+                state <= 10;
+
+            elsif(state = 10) then
+                state <= 11;
+
+            elsif(state = 11) then
+                state <= 12;
+
+            elsif(state = 12) then
+                state <= 1;
+
+            elsif(state = 13) then
+                state <= 15;
             
+            elsif(state = 14) then
+                state <= 13;
+
+            elsif(state = 15) then
+                state <= 1;
+                
             end if;
             
         end if;
