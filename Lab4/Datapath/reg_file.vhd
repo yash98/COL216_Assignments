@@ -42,12 +42,12 @@ begin
 
     process(clock)
     begin
+        if (pc_we = '1') then
+            r(15) <= pc_write;
+        end if;
         if (rising_edge(clock)) then
             if (we = '1') then
             r(waddr_in) <= winp;
-            end if;
-            if (pc_we = '1') then
-                r(15) <= pc_write;
             end if;
         end if;
     end process;

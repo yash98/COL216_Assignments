@@ -28,7 +28,6 @@ entity main_control is
         ReW: out std_logic;  -- reg store write enable
         
         -- self defined
-        cin: out std_logic; -- for alu
         pc_reset: out std_logic; -- for reg_file pc <= 0
         
         shiftSrc: out std_logic_vector(1 downto 0);
@@ -46,7 +45,9 @@ entity main_control is
 end entity;
 
 architecture beh of main_control is
-signal state: integer := 0;
+signal state: integer := 1;
+signal wait_count: std_logic_vector(1 downto 0);
+
 begin
     process(clock)
     begin
@@ -55,7 +56,7 @@ begin
                 if (ins(27 downto 25) = "00") then
                     --DP
                     if ((ins(24 downto 23) = "00") and (ins(7 downto 4) = "1001")) then
-                        state <= 8;
+                        state <= 9;
                     --MUL/MLA
                     else
                         state <= 2;
@@ -69,10 +70,10 @@ begin
                     end if;
                 end if;
             
-            elsif(state = 2) then
+            elsif (state = 2) then
                 state <= 3;
             
-            elsif(state = 3) then
+            elsif (state = 3) then
                 if (ins(25) = '1') then
                     state <= 4;
                 else
@@ -83,26 +84,274 @@ begin
                     end if;
                 end if;        
             
-            elsif(state = 4) then
+            elsif (state = 4) then
                 state <= 7;
              
-            elsif(state = 5) then
+            elsif (state = 5) then
                 state <= 7;
             
-            elsif(state = 6) then
+            elsif (state = 6) then
                 state <= 7;
                 
-            elsif(state = 7) then
+            elsif (state = 7) then
                 state <= 8;
                 
-            elsif(state = 
+            elsif (state = 8) then 
+                state <= 1;
+                
+            elsif (state = 9) then 
+                state <= 10;
             
+            
+            elsif (state = 10) then
+                wait_count <= wait_count + "01";
+                state <= 10;
+                if (wait_count = "10") then
+                    state <= 11;
+                    wait_count <= "00";
+                end if;
+                
+            elsif(state = 11) then
+                state <= 12;
+                
+            elsif (state = 12) then
+                state <= 1;
+                
+            elsif (state = 13) then
+                state <= 15;
+            
+            elsif (state = 14) then
+                state <= 13;
+                
+            elsif (state = 15) then
+                state <= 1;
+
             end if;
             
         end if;
     end process;
     
-    
+    process(clock)
+    begin
+        if (state = 1) then
+            PW <= '1';
+            IorD <= "0";
+            IRW <= '1';
+            DRW <= '0'; --x
+            M2R <= "0"; --x
+            Rsrc <= "0"; --x
+            RW <= '0'; --x
+            AW <= '0'; --x
+            BW <= '0'; --x
+            XW <= '0'; --x
+            Asrc1 <= "0";
+            Asrc2 <= "1";
+            op <= "0100";
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "00"; --x
+            amtSrc <= "00"; --x
+            wadsrc <= "0000"; --x
+            rad1src <= "0";
+            
+            typ_dt <= "00";
+            byte_off <= "00";
+            
+            CW <= '0'; --x
+            DW <= '0'; --x
+            
+        elsif (state = 2) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0';
+            DRW <= '0'; --x
+            M2R <= "0"; --x
+            Rsrc <= "1";
+            RW <= '0'; --x
+            AW <= '1';
+            BW <= '1';
+            XW <= '0'; --x
+            Asrc1 <= "1";
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "00"; --x
+            amtSrc <= "00"; --x
+            wadsrc <= "0000"; --x
+            rad1src <= "0";
+            
+            typ_dt <= "00";
+            byte_off <= "00";
+            
+            CW <= '0'; --x
+            DW <= '0'; --x
+            
+        elsif (state = 3) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0';
+            DRW <= '0'; --x
+            M2R <= "0"; --x
+            Rsrc <= "0";
+            RW <= '0'; --x
+            AW <= '0';
+            BW <= '0';
+            XW <= '1';
+            Asrc1 <= "1";
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "00"; --x
+            amtSrc <= "00"; --x
+            wadsrc <= "0000"; --x
+            rad1src <= "0"; --x
+            
+            typ_dt <= "00";
+            byte_off <= "00";
+            
+            CW <= '0'; --x
+            DW <= '0'; --x
+            
+        elsif (state = 4) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0';
+            DRW <= '0'; --x
+            M2R <= "0"; --x
+            Rsrc <= "0"; --x
+            RW <= '0'; --x
+            AW <= '0';
+            BW <= '0';
+            XW <= '0';
+            Asrc1 <= "1";
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "01";
+            amtSrc <= "00";
+            wadsrc <= "0000"; --x
+            rad1src <= "0"; --x
+            
+            typ_dt <= "00"; --x
+            byte_off <= "00"; --x
+            
+            CW <= '1';
+            DW <= '1';
+                        
+        elsif (state = 5) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0';
+            DRW <= '0'; --x
+            M2R <= "0"; --x
+            Rsrc <= "0"; --x
+            RW <= '0'; --x
+            AW <= '0';
+            BW <= '0';
+            XW <= '0';
+            Asrc1 <= "1";
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "00";
+            amtSrc <= "10";
+            wadsrc <= "0000"; --x
+            rad1src <= "0"; --x
+            
+            typ_dt <= "00"; --x
+            byte_off <= "00"; --x
+            
+            CW <= '1';
+            DW <= '1';
+        
+        
+        elsif (state = 6) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0';
+            DRW <= '0'; --x
+            M2R <= "0"; --x
+            Rsrc <= "0"; --x
+            RW <= '0'; --x
+            AW <= '0';
+            BW <= '0';
+            XW <= '0';
+            Asrc1 <= "1";
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "00";
+            amtSrc <= "00";
+            wadsrc <= "0000"; --x
+            rad1src <= "0"; --x
+            
+            typ_dt <= "00"; --x
+            byte_off <= "00"; --x
+            
+            CW <= '1';
+            DW <= '1';
+            
+        elsif (state = 7) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0';
+            DRW <= '0'; --x
+            M2R <= "0"; --x
+            Rsrc <= "0"; --x
+            RW <= '0'; --x
+            AW <= '0';
+            BW <= '0';
+            XW <= '0';
+            Asrc1 <= "1";
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "01";
+            amtSrc <= "00";
+            wadsrc <= "0000"; --x
+            rad1src <= "0"; --x
+            
+            typ_dt <= "00"; --x
+            byte_off <= "00"; --x
+            
+            CW <= '1';
+            DW <= '1';
+        end if;
+    end process;
     
 end architecture;
 

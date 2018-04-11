@@ -25,7 +25,6 @@ entity datapath is
         ReW: in std_logic;  -- reg store write enable
         
         -- self defined
-        cin: in std_logic; -- for alu
         clock: in std_logic;
         pc_reset: in std_logic; -- for reg_file pc <= 0
         
@@ -92,7 +91,7 @@ ALU: entity work.alu port map (
     a => Asrc1_out,
     b => Asrc2_out,
     operation => op,
-    carryIn => cin,
+    carryIn => F(0),
     c_in_from_shifter => c_from_shifter,
     result => alu_out,
     flags => alu_f_out
@@ -199,7 +198,7 @@ F <= alu_f_out when Fset = '1';
 Flags <= F;
 
 -- RES reg set
-RES <= alu_out when rising_edge(ReW);
+RES <= alu_out when ReW = '1';
 
 --  A and B and X reg
 A <= rd1_out when AW = '1';
