@@ -133,6 +133,7 @@ begin
     
     process(clock)
     begin
+        --PC=PC+4 and IR = Mem[PC]
         if (state = 1) then
             PW <= '1';
             IorD <= "0";
@@ -163,7 +164,8 @@ begin
             
             CW <= '0'; --x
             DW <= '0'; --x
-            
+        
+        --A=ins[19-16] and B=ins[3-0]    
         elsif (state = 2) then
             PW <= '0';
             IorD <= "0"; --x
@@ -175,11 +177,11 @@ begin
             AW <= '1';
             BW <= '1';
             XW <= '0'; --x
-            Asrc1 <= "1";
+            Asrc1 <= "1"; --x
             Asrc2 <= "0"; --x
             op <= "0000"; --x
-            Fset <= '0';
-            ReW <= '0';
+            Fset <= '0'; --x
+            ReW <= '0'; --x
             
             -- self defined
             pc_reset <= '0'; --x
@@ -194,11 +196,12 @@ begin
             
             CW <= '0'; --x
             DW <= '0'; --x
-            
+        
+        --X=ins[11-8]    
         elsif (state = 3) then
             PW <= '0';
             IorD <= "0"; --x
-            IRW <= '0';
+            IRW <= '0'; --x
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "0";
@@ -225,11 +228,12 @@ begin
             
             CW <= '0'; --x
             DW <= '0'; --x
-            
+        
+        -- shiftSrc = ins[3-0] and amtSrc = ins[11-8]&'0' and Shifter "ROR" mode    (DP instruction without shift)
         elsif (state = 4) then
             PW <= '0';
             IorD <= "0"; --x
-            IRW <= '0';
+            IRW <= '0'; --x
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "0"; --x
@@ -247,7 +251,7 @@ begin
             pc_reset <= '0'; --x
             
             shiftSrc <= "01";
-            amtSrc <= "00";
+            amtSrc <= "11";
             wadsrc <= "0000"; --x
             rad1src <= "0"; --x
             
@@ -256,7 +260,8 @@ begin
             
             CW <= '1';
             DW <= '1';
-                        
+        
+        --shiftSrc = "B" and amtSrc = ins[11-7] and Shifter "B" mode    (DP instruction with imm shift amt)            
         elsif (state = 5) then
             PW <= '0';
             IorD <= "0"; --x
@@ -288,7 +293,7 @@ begin
             CW <= '1';
             DW <= '1';
         
-        
+        -- ShiftSrc = "B" and amtSrc = "X" and Shifter "B" mode    (DP instruction with reg shift amt)
         elsif (state = 6) then
             PW <= '0';
             IorD <= "0"; --x
@@ -319,11 +324,12 @@ begin
             
             CW <= '1';
             DW <= '1';
-            
+        
+        -- ALU Step 
         elsif (state = 7) then
             PW <= '0';
             IorD <= "0"; --x
-            IRW <= '0';
+            IRW <= '0'; --x
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "0"; --x
@@ -333,14 +339,14 @@ begin
             XW <= '0';
             Asrc1 <= "1";
             Asrc2 <= "0"; --x
-            op <= "0000"; --x
-            Fset <= '0';
-            ReW <= '0';
+            op <= ins(24 downto 21); --x
+            Fset <= '1';
+            ReW <= '1';
             
             -- self defined
             pc_reset <= '0'; --x
             
-            shiftSrc <= "01";
+            shiftSrc <= "00";
             amtSrc <= "00";
             wadsrc <= "0000"; --x
             rad1src <= "0"; --x
@@ -348,8 +354,79 @@ begin
             typ_dt <= "00"; --x
             byte_off <= "00"; --x
             
-            CW <= '1';
-            DW <= '1';
+            CW <= '0';
+            DW <= '0';
+        
+        --write back in register
+        elsif (state = 8) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0'; --x
+            DRW <= '0'; --x
+            M2R <= "1";
+            Rsrc <= "0"; --x
+            RW <= '1'; 
+            AW <= '0'; --x
+            BW <= '0'; --x
+            XW <= '0'; --x
+            Asrc1 <= "1"; --x
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+            
+            -- self defined
+            pc_reset <= '0'; --x
+            
+            shiftSrc <= "00"; --x
+            amtSrc <= "00"; --x
+            wadsrc <= "0000";
+            rad1src <= "0"; --x
+            
+            typ_dt <= "00"; --x
+            byte_off <= "00"; --x
+            
+            CW <= '0'; --x
+            DW <= '0'; --x
+        
+        
+        --A=ins[15-12] and B=ins[3-0]    
+        elsif (state = 9) then
+            PW <= '0';
+            IorD <= "0"; --x
+            IRW <= '0'; --x
+            DRW <= '0'; --x
+            M2R <= "1";
+            Rsrc <= "0"; --x
+            RW <= '1'; 
+            AW <= '0'; --x
+            BW <= '0'; --x
+            XW <= '0'; --x
+            Asrc1 <= "1"; --x
+            Asrc2 <= "0"; --x
+            op <= "0000"; --x
+            Fset <= '0';
+            ReW <= '0';
+                
+                -- self defined
+            pc_reset <= '0'; --x
+                
+            shiftSrc <= "00"; --x
+            amtSrc <= "00"; --x
+            wadsrc <= "0000";
+            rad1src <= "0"; --x
+                
+            typ_dt <= "00"; --x
+            byte_off <= "00"; --x
+                
+            CW <= '0'; --x
+            DW <= '0'; --x            
+            
+         
+
+
+
+
         end if;
     end process;
     
