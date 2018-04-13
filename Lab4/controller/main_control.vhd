@@ -115,18 +115,15 @@ begin
                 state <= 12;
                 
             elsif (state = 12) then
-                state <= 13;
+                state <= 1;
                 
             elsif (state = 13) then
-                state <= 1;
+                state <= 15;
             
             elsif (state = 14) then
-                state <= 16;
+                state <= 13;
                 
             elsif (state = 15) then
-                state <= 14;
-                
-            elsif (state = 16) then
                 state <= 1;
 
             end if;
@@ -457,40 +454,9 @@ begin
             CW <= '0'; --x
             DW <= '0'; --x          
 
-        --wait cycle                           (same as previous state)
-        elsif (state = 11) then
-            PW <= '0';
-            IorD <= "0"; --x
-            IRW <= '0'; --x
-            DRW <= '0'; --x
-            M2R <= "0"; --x
-            Rsrc <= "0";
-            RW <= '0';
-            AW <= '0'; 
-            BW <= '0';
-            XW <= '1'; 
-            Asrc1 <= "1"; --x 
-            Asrc2 <= "00"; --x
-            op <= "0000"; --x
-            Fset <= '0'; --x
-            ReW <= '0'; --x
-                            
-            -- self defined
-            pc_reset <= '0'; --x
-                            
-            shiftSrc <= "00"; --x
-            amtSrc <= "00"; --x
-            wadsrc <= "0000";
-            rad1src <= "0"; --x
-                            
-            typ_dt <= "00"; --x
-            byte_off <= "00"; --x
-                            
-            CW <= '0'; --x
-            DW <= '0'; --x  
 
         --ALU Step   Asrc2="Mul" and  Asrc1="A" 
-        elsif (state = 12) then
+        elsif (state = 11) then
             PW <= '0';
             IorD <= "0"; --x
             IRW <= '0'; --x
@@ -522,7 +488,7 @@ begin
             DW <= '0'; --x        
             
         -- writeback to memory   
-        elsif (state = 13) then
+        elsif (state = 12) then
             PW <= '0'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
@@ -571,7 +537,7 @@ begin
             Fset <= '0'; 
             ReW <= '0';
                                             
-                            -- self defined
+            -- self defined
             pc_reset <= '0'; --x
                                             
             shiftSrc <= "10";
@@ -586,7 +552,7 @@ begin
             DW <= '1';
         
         -- bl instruction (initially we store PC+=4 into l register) rest same as b instruction
-        elsif (state = 15) then
+        elsif (state = 13) then
             PW <= '0'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
@@ -618,7 +584,7 @@ begin
             DW <= '0'; --x
         
         -- PC = PC + offset  and  asrc2='0'(shfter out) and asrc1='0' (PC) 
-        elsif (state = 16) then
+        elsif (state = 15) then
             PW <= '1'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
