@@ -10,6 +10,7 @@ entity main_control is
         pc_out: in std_logic_vector(31 downto 0);
         Flags: in std_logic_vector(3 downto 0);
         ins: in std_logic_vector(31 downto 0);
+        pred: in std_logic;
 
         PW: out std_logic;   -- write to pc when 1
         IorD: out std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
@@ -27,7 +28,7 @@ entity main_control is
         Fset: out std_logic; -- set flags along command
         ReW: out std_logic;  -- reg store write enable
         
-        -- self defined
+        --self defined
         pc_reset: out std_logic; -- for reg_file pc <= 0
         
         shiftSrc: out std_logic_vector(1 downto 0);
@@ -53,11 +54,14 @@ begin
     begin
         if(rising_edge(clock)) then
             if (state = 1) then
-                if (ins(27 downto 25) = "00") then
-                    --DP
+                if (pred = '0') then
+                    state <= 1;
+                -- DP
+                elsif (ins(27 downto 25) = "00") then
+                    --MUL/MLA 
                     if ((ins(24 downto 23) = "00") and (ins(7 downto 4) = "1001")) then
                         state <= 9;
-                    --MUL/MLA
+                    --arith logic
                     else
                         state <= 2;
                     end if;
@@ -197,11 +201,11 @@ begin
             CW <= '0'; --x
             DW <= '0'; --x
         
-        --X=ins[11-8]    
+        --X=ins[11-8]
         elsif (state = 3) then
             PW <= '0';
             IorD <= "0"; --x
-            IRW <= '0'; --x
+            IRW <= '0';
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "0";
@@ -233,7 +237,7 @@ begin
         elsif (state = 4) then
             PW <= '0';
             IorD <= "0"; --x
-            IRW <= '0'; --x
+            IRW <= '0';
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "0"; --x
@@ -329,7 +333,7 @@ begin
         elsif (state = 7) then
             PW <= '0';
             IorD <= "0"; --x
-            IRW <= '0'; --x
+            IRW <= '0';
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "0"; --x
@@ -340,7 +344,7 @@ begin
             Asrc1 <= "1";
             Asrc2 <= "00"; --x
             op <= ins(24 downto 21); --x
-            Fset <= '1';
+            Fset <= ins(20);
             ReW <= '1';
             
             -- self defined
@@ -405,7 +409,7 @@ begin
             Asrc1 <= "0"; 
             Asrc2 <= "00";
             op <= "0000"; --x
-            Fset <= '0'; --x
+            Fset <= '0';
             ReW <= '0'; --x
                 
                 -- self defined
@@ -463,16 +467,16 @@ begin
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "0"; --x
-            RW <= '0'; --x
+            RW <= '0';
             AW <= '0'; --x
             BW <= '0'; --x
             XW <= '0'; --x
             Asrc1 <= "1"; --x 
             Asrc2 <= "10"; --x
             op <= ins(24 downto 21); --x
-            Fset <= '1'; 
+            Fset <= ins(20); 
             ReW <= '1';
-                            
+            
             -- self defined
             pc_reset <= '0'; --x
                             
@@ -520,7 +524,7 @@ begin
             DW <= '0'; --x
         
         -- b instruction (shiftSrc = ins[24 downto 0] and amtSrc = "1" (int 2) and mode ="LSL" )      
-        elsif (state = 14) then
+        elsif (state = 13) then
             PW <= '0'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
@@ -552,7 +556,7 @@ begin
             DW <= '1';
         
         -- bl instruction (initially we store PC+=4 into l register) rest same as b instruction
-        elsif (state = 13) then
+        elsif (state = 14) then
             PW <= '0'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
@@ -574,7 +578,7 @@ begin
                                             
             shiftSrc <= "00";
             amtSrc <= "00"; 
-            wadsrc <= "0011"; --x
+            wadsrc <= "0011";
             rad1src <= "0"; --x
                                             
             typ_dt <= "00"; --x
@@ -588,15 +592,15 @@ begin
             PW <= '1'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
-            DRW <= '0'; --x
+            DRW <= '0'; --x`
             M2R <= "0"; --x
             Rsrc <= "0"; --x
             RW <= '0'; --x
             AW <= '0'; --x
             BW <= '0'; --x
             XW <= '0'; --x
-            Asrc1 <= "0"; --x 
-            Asrc2 <= "00"; --x
+            Asrc1 <= "0";
+            Asrc2 <= "00";
             op <= "0100";
             Fset <= '0'; 
             ReW <= '0';
