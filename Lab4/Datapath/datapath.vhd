@@ -52,14 +52,14 @@ entity datapath is
         r5_out: out std_logic_vector(31 downto 0);
         r6_out: out std_logic_vector(31 downto 0);
         r7_out: out std_logic_vector(31 downto 0);
-        r8: out std_logic_vector(31 downto 0);
-        r9: out std_logic_vector(31 downto 0);
-        r10: out std_logic_vector(31 downto 0);
-        r11: out std_logic_vector(31 downto 0);
-        r12: out std_logic_vector(31 downto 0);
-        r13: out std_logic_vector(31 downto 0);
-        r14: out std_logic_vector(31 downto 0);
-        r15: out std_logic_vector(31 downto 0)
+        r8_out: out std_logic_vector(31 downto 0);
+        r9_out: out std_logic_vector(31 downto 0);
+        r10_out: out std_logic_vector(31 downto 0);
+        r11_out: out std_logic_vector(31 downto 0);
+        r12_out: out std_logic_vector(31 downto 0);
+        r13_out: out std_logic_vector(31 downto 0);
+        r14_out: out std_logic_vector(31 downto 0);
+        r15_out: out std_logic_vector(31 downto 0)
     );
 end entity;
 
@@ -129,22 +129,22 @@ RF: entity work.reg_file port map (
     pc => pc_o,
     rout1 => rd1_out,
     rout2 => rd2_out,
-    r0: out std_logic_vector(31 downto 0);
-    r1: out std_logic_vector(31 downto 0);
-    r2: out std_logic_vector(31 downto 0);
-    r3: out std_logic_vector(31 downto 0);
-    r4: out std_logic_vector(31 downto 0);
-    r5: out std_logic_vector(31 downto 0);
-    r6: out std_logic_vector(31 downto 0);
-    r7: out std_logic_vector(31 downto 0);
-    r8: out std_logic_vector(31 downto 0);
-    r9: out std_logic_vector(31 downto 0);
-    r10: out std_logic_vector(31 downto 0);
-    r11: out std_logic_vector(31 downto 0);
-    r12: out std_logic_vector(31 downto 0);
-    r13: out std_logic_vector(31 downto 0);
-    r14: out std_logic_vector(31 downto 0);
-    r15: out std_logic_vector(31 downto 0)
+    r0 => r0_out,
+    r1 => r1_out,
+    r2 => r2_out,
+    r3 => r3_out,
+    r4 => r4_out,
+    r5 => r5_out,
+    r6 => r6_out,
+    r7 => r7_out,
+    r8 => r8_out,
+    r9 => r9_out,
+    r10 => r10_out,
+    r11 => r11_out,
+    r12 => r12_out,
+    r13 => r13_out,
+    r14 => r14_out,
+    r15 => r15_out
 );
 pc_out <= pc_o;
 

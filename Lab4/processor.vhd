@@ -7,8 +7,25 @@ library UNISIM;
 entity processor is 
     port (
         cl: in std_logic;
-        pc_res: in std_logic
+        pc_res: in std_logic;
         
+        -- register output
+        r0: out std_logic_vector(31 downto 0);
+        r1: out std_logic_vector(31 downto 0);
+        r2: out std_logic_vector(31 downto 0);
+        r3: out std_logic_vector(31 downto 0);
+        r4: out std_logic_vector(31 downto 0);
+        r5: out std_logic_vector(31 downto 0);
+        r6: out std_logic_vector(31 downto 0);
+        r7: out std_logic_vector(31 downto 0);
+        r8: out std_logic_vector(31 downto 0);
+        r9: out std_logic_vector(31 downto 0);
+        r10: out std_logic_vector(31 downto 0);
+        r11: out std_logic_vector(31 downto 0);
+        r12: out std_logic_vector(31 downto 0);
+        r13: out std_logic_vector(31 downto 0);
+        r14: out std_logic_vector(31 downto 0);
+        r15: out std_logic_vector(31 downto 0)
     );
 end entity;
 
@@ -86,7 +103,24 @@ DP: entity work.datapath port map (
     
     pc_out => pc_out_int,
     instruction => ins_int,
-    Flags => Flags_int
+    Flags => Flags_int,
+    
+    r0_out => r0,
+    r1_out => r1,
+    r2_out => r2,
+    r3_out => r3,
+    r4_out => r4,
+    r5_out => r5,
+    r6_out => r6,
+    r7_out => r7,
+    r8_out => r8,
+    r9_out => r9,
+    r10_out => r10,
+    r11_out => r11,
+    r12_out => r12,
+    r13_out => r13,
+    r14_out => r14,
+    r15_out => r15
 );
 MC: entity work.main_control port map (
     clock => cl,

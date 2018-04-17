@@ -55,7 +55,24 @@ begin
     
     rout1 <= r(raddr1_in);
     rout2 <= r(raddr2_in);
-
+    
+    r0 <= r(0);
+    r1 <= r(1);
+    r2 <= r(2);
+    r3 <= r(3);
+    r4 <= r(4);
+    r5 <= r(5);
+    r6 <= r(6);
+    r7 <= r(7);
+    r8 <= r(8);
+    r9 <= r(9);
+    r10 <= r(10);
+    r11 <= r(11);
+    r12 <= r(12);
+    r13 <= r(13);
+    r14 <= r(14);
+    r15 <= r(15);
+    
     process(clock)
     begin
         if (pc_we = '1') then
