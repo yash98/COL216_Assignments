@@ -148,9 +148,7 @@ begin
             Fset <= '0';
             ReW <= '0';
             
-            -- self defined
-            pc_reset <= '0'; --x
-            
+            -- self defined            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000"; --x
@@ -180,9 +178,7 @@ begin
             Fset <= '0'; --x
             ReW <= '0'; --x
             
-            -- self defined
-            pc_reset <= '0'; --x
-            
+            -- self defined            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000"; --x
@@ -213,8 +209,6 @@ begin
             ReW <= '0';
             
             -- self defined
-            pc_reset <= '0'; --x
-            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000"; --x
@@ -245,8 +239,6 @@ begin
             ReW <= '0';
             
             -- self defined
-            pc_reset <= '0'; --x
-            
             shiftSrc <= "01";
             amtSrc <= "11";
             wadsrc <= "0000"; --x
@@ -277,8 +269,6 @@ begin
             ReW <= '0';
             
             -- self defined
-            pc_reset <= '0'; --x
-            
             shiftSrc <= "00";
             amtSrc <= "10";
             wadsrc <= "0000"; --x
@@ -309,8 +299,6 @@ begin
             ReW <= '0';
             
             -- self defined
-            pc_reset <= '0'; --x
-            
             shiftSrc <= "00";
             amtSrc <= "00";
             wadsrc <= "0000"; --x
@@ -341,8 +329,6 @@ begin
             ReW <= '1';
             
             -- self defined
-            pc_reset <= '0'; --x
-            
             shiftSrc <= "00";
             amtSrc <= "00";
             wadsrc <= "0000"; --x
@@ -373,8 +359,6 @@ begin
             ReW <= '0';
             
             -- self defined
-            pc_reset <= '0'; --x
-            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000";
@@ -405,9 +389,7 @@ begin
             Fset <= '0';
             ReW <= '0'; --x
                 
-                -- self defined
-            pc_reset <= '0'; --x
-                
+                -- self defined         
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000";
@@ -437,9 +419,7 @@ begin
             Fset <= '0'; --x
             ReW <= '0'; --x
                             
-            -- self defined
-            pc_reset <= '0'; --x
-                            
+            -- self defined                     
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000";
@@ -470,9 +450,7 @@ begin
             Fset <= ins(20); 
             ReW <= '1';
             
-            -- self defined
-            pc_reset <= '0'; --x
-                            
+            -- self defined                    
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000";
@@ -502,9 +480,7 @@ begin
             Fset <= '0'; 
             ReW <= '0';
                                 
-                -- self defined
-            pc_reset <= '0'; --x
-                                
+                -- self defined                           
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0010";
@@ -534,9 +510,7 @@ begin
             Fset <= '0'; 
             ReW <= '0';
                                             
-            -- self defined
-            pc_reset <= '0'; --x
-                                            
+            -- self defined                                        
             shiftSrc <= "10";
             amtSrc <= "01"; 
             wadsrc <= "0000"; --x
@@ -566,9 +540,7 @@ begin
             Fset <= '0'; 
             ReW <= '1';
                                             
-            -- self defined
-            pc_reset <= '0'; --x
-                                            
+            -- self defined                                     
             shiftSrc <= "00";
             amtSrc <= "00"; 
             wadsrc <= "0011";
@@ -598,9 +570,7 @@ begin
             Fset <= '0'; 
             ReW <= '0';
                                             
-            -- self defined
-            pc_reset <= '0'; --x
-                                            
+            -- self defined                                           
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
             wadsrc <= "0000"; --x
