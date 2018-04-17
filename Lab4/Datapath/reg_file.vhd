@@ -19,7 +19,23 @@ entity reg_file is
         
         pc: out std_logic_vector(31 downto 0);
         rout1: out std_logic_vector(31 downto 0);
-        rout2: out std_logic_vector(31 downto 0)
+        rout2: out std_logic_vector(31 downto 0);
+        r0: out std_logic_vector(31 downto 0);
+        r1: out std_logic_vector(31 downto 0);
+        r2: out std_logic_vector(31 downto 0);
+        r3: out std_logic_vector(31 downto 0);
+        r4: out std_logic_vector(31 downto 0);
+        r5: out std_logic_vector(31 downto 0);
+        r6: out std_logic_vector(31 downto 0);
+        r7: out std_logic_vector(31 downto 0);
+        r8: out std_logic_vector(31 downto 0);
+        r9: out std_logic_vector(31 downto 0);
+        r10: out std_logic_vector(31 downto 0);
+        r11: out std_logic_vector(31 downto 0);
+        r12: out std_logic_vector(31 downto 0);
+        r13: out std_logic_vector(31 downto 0);
+        r14: out std_logic_vector(31 downto 0);
+        r15: out std_logic_vector(31 downto 0)   
     );
 end entity;
 

@@ -41,7 +41,25 @@ entity datapath is
         
         pc_out: out std_logic_vector(31 downto 0);
         instruction: out std_logic_vector(31 downto 0);
-        Flags: out std_logic_vector(3 downto 0)
+        Flags: out std_logic_vector(3 downto 0);
+        
+        -- register output
+        r0_out: out std_logic_vector(31 downto 0);
+        r1_out: out std_logic_vector(31 downto 0);
+        r2_out: out std_logic_vector(31 downto 0);
+        r3_out: out std_logic_vector(31 downto 0);
+        r4_out: out std_logic_vector(31 downto 0);
+        r5_out: out std_logic_vector(31 downto 0);
+        r6_out: out std_logic_vector(31 downto 0);
+        r7_out: out std_logic_vector(31 downto 0);
+        r8: out std_logic_vector(31 downto 0);
+        r9: out std_logic_vector(31 downto 0);
+        r10: out std_logic_vector(31 downto 0);
+        r11: out std_logic_vector(31 downto 0);
+        r12: out std_logic_vector(31 downto 0);
+        r13: out std_logic_vector(31 downto 0);
+        r14: out std_logic_vector(31 downto 0);
+        r15: out std_logic_vector(31 downto 0)
     );
 end entity;
 
@@ -110,7 +128,23 @@ RF: entity work.reg_file port map (
     pc_write => alu_out,
     pc => pc_o,
     rout1 => rd1_out,
-    rout2 => rd2_out
+    rout2 => rd2_out,
+    r0: out std_logic_vector(31 downto 0);
+    r1: out std_logic_vector(31 downto 0);
+    r2: out std_logic_vector(31 downto 0);
+    r3: out std_logic_vector(31 downto 0);
+    r4: out std_logic_vector(31 downto 0);
+    r5: out std_logic_vector(31 downto 0);
+    r6: out std_logic_vector(31 downto 0);
+    r7: out std_logic_vector(31 downto 0);
+    r8: out std_logic_vector(31 downto 0);
+    r9: out std_logic_vector(31 downto 0);
+    r10: out std_logic_vector(31 downto 0);
+    r11: out std_logic_vector(31 downto 0);
+    r12: out std_logic_vector(31 downto 0);
+    r13: out std_logic_vector(31 downto 0);
+    r14: out std_logic_vector(31 downto 0);
+    r15: out std_logic_vector(31 downto 0)
 );
 pc_out <= pc_o;
 

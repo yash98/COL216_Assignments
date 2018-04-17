@@ -27,8 +27,6 @@ entity main_control is
         ReW: out std_logic;  -- reg store write enable
         
         --self defined
-        pc_reset: out std_logic; -- for reg_file pc <= 0
-        
         shiftSrc: out std_logic_vector(1 downto 0);
         amtSrc: out std_logic_vector(1 downto 0);
         wadsrc: out std_logic_vector(3 downto 0);
