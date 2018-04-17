@@ -11,10 +11,10 @@ entity main_control is
         pred: in std_logic;
 
         PW: out std_logic;   -- write to pc when 1
-        IorD: out std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
+        IorD: out std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
         IRW: out std_logic; -- Instruction write/save enable
         DRW: out std_logic; -- data register write enable
-        M2R: out std_logic_vector(0 downto 0); -- pick data or result to write to register file
+        M2R: out std_logic_vector(1 downto 0); -- pick data or result to write to register file
         Rsrc: out std_logic_vector(1 downto 0); -- pick rd or rm for rad2
         RW: out std_logic; -- write enable for register file
         AW: out std_logic;  -- rf out1 store reg write enable
@@ -29,10 +29,10 @@ entity main_control is
         --self defined
         shiftSrc: out std_logic_vector(1 downto 0);
         amtSrc: out std_logic_vector(1 downto 0);
-        wadsrc: out std_logic_vector(3 downto 0);
+        wadsrc: out std_logic_vector(1 downto 0);
         rad1src: out std_logic_vector(0 downto 0);
         
-        typ_dt: out std_logic_vector(1 downto 0);
+        typ_dt: out std_logic_vector(3 downto 0);
         byte_off: out std_logic_vector(1 downto 0);
         
         CW: out std_logic;

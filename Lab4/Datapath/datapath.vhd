@@ -9,17 +9,17 @@ entity datapath is
     port (
         -- figure defined inputs from controller
         PW: in std_logic;   -- write to pc when 1
-        IorD: in std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
+        IorD: in std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
         IRW: in std_logic; -- Instruction write/save enable
         DRW: in std_logic; -- data register write enable
-        M2R: in std_logic_vector(1 downto 0); -- pick data or result to write to register file
+        M2R: in std_logic_vector(0 downto 0); -- pick data or result to write to register file
         Rsrc: in std_logic_vector(1 downto 0); -- pick rd or rm for rad2
         RW: in std_logic; -- write enable for register file
         AW: in std_logic;  -- rf out1 store reg write enable
         BW: in std_logic;  -- rf out2 store B reg write enable
         XW: in std_logic;  -- rf out2 store X reg write enable
         Asrc1: in std_logic_vector(0 downto 0); -- pick pc for inc. or rf out1 for calc
-        Asrc2: in std_logic_vector(4 downto 0); -- choose from rf out 2 or 4 (for pc+4 step) or Imm or offset for branch
+        Asrc2: in std_logic_vector(1 downto 0); -- choose from rf out 2 or 4 (for pc+4 step) or Imm or offset for branch
         op: in std_logic_vector(3 downto 0);  -- op code for alu
         Fset: in std_logic; -- set flags along command
         ReW: in std_logic;  -- reg store write enable

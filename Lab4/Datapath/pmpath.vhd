@@ -33,7 +33,7 @@ begin
     
     halfword <= inp(15 downto 0) when byte_offset = "00" else
                 inp(23 downto 8) when byte_offset = "01" else
-                inp(31 downto 15); 
+                inp(31 downto 16); 
     
     -- ldr or str
     inp <= data_from_reg when type_of_dt(3) = '0' else
@@ -61,8 +61,8 @@ begin
                 '0' when type_of_dt(3 downto 1) = "00" else
                 '0';
 
-    prefix_bus <= "11111111111111111111111111111111" when prefix = '1' else
-                    "00000000000000000000000000000000";
+    prefix_bus <= "111111111111111111111111" when prefix = '1' else
+                    "000000000000000000000000";
     -- halfword or (word or byte)
     
     outp <= inp when type_of_dt(3) = '0' else
