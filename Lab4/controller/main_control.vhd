@@ -11,10 +11,10 @@ entity main_control is
         pred: in std_logic;
 
         PW: out std_logic;   -- write to pc when 1
-        IorD: out std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
+        IorD: out std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
         IRW: out std_logic; -- Instruction write/save enable
         DRW: out std_logic; -- data register write enable
-        M2R: out std_logic_vector(1 downto 0); -- pick data or result to write to register file
+        M2R: out std_logic_vector(0 downto 0); -- pick data or result to write to register file
         Rsrc: out std_logic_vector(1 downto 0); -- pick rd or rm for rad2
         RW: out std_logic; -- write enable for register file
         AW: out std_logic;  -- rf out1 store reg write enable
@@ -36,13 +36,13 @@ entity main_control is
         byte_off: out std_logic_vector(1 downto 0);
         
         CW: out std_logic;
-        DW: out std_logic
-
-    );    
+        DW: out std_logic;
+        state_out: out integer
+    );
 end entity;
 
 architecture beh of main_control is
-signal state: integer range 0 to 16 := 1;
+signal state: integer range 1 to 16 := 1;
 signal wait_count: std_logic_vector(1 downto 0):= "00";
 
 begin
@@ -151,10 +151,10 @@ begin
             -- self defined            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0";
             
-            typ_dt <= "00";
+            typ_dt <= "0000";
             byte_off <= "00";
             
             CW <= '0'; --x
@@ -181,10 +181,10 @@ begin
             -- self defined            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0";
             
-            typ_dt <= "00";
+            typ_dt <= "0000";
             byte_off <= "00";
             
             CW <= '0'; --x
@@ -211,10 +211,10 @@ begin
             -- self defined
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0"; --x
             
-            typ_dt <= "00";
+            typ_dt <= "0000";
             byte_off <= "00";
             
             CW <= '0'; --x
@@ -241,10 +241,10 @@ begin
             -- self defined
             shiftSrc <= "01";
             amtSrc <= "11";
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0"; --x
             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
             
             CW <= '1';
@@ -271,10 +271,10 @@ begin
             -- self defined
             shiftSrc <= "00";
             amtSrc <= "10";
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0"; --x
             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
             
             CW <= '1';
@@ -301,10 +301,10 @@ begin
             -- self defined
             shiftSrc <= "00";
             amtSrc <= "00";
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0"; --x
             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
             
             CW <= '1';
@@ -331,10 +331,10 @@ begin
             -- self defined
             shiftSrc <= "00";
             amtSrc <= "00";
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0"; --x
             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
             
             CW <= '0';
@@ -361,10 +361,10 @@ begin
             -- self defined
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000";
+            wadsrc <= "00";
             rad1src <= "0"; --x
             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
             
             CW <= '0'; --x
@@ -392,10 +392,10 @@ begin
                 -- self defined         
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000";
+            wadsrc <= "00";
             rad1src <= "0"; --x
                 
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
                 
             CW <= '0'; --x
@@ -422,10 +422,10 @@ begin
             -- self defined                     
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000";
+            wadsrc <= "00";
             rad1src <= "0"; --x
                             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
                             
             CW <= '0'; --x
@@ -453,10 +453,10 @@ begin
             -- self defined                    
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000";
+            wadsrc <= "00";
             rad1src <= "0"; --x
                             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
                             
             CW <= '0'; --x
@@ -483,10 +483,10 @@ begin
                 -- self defined                           
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0010";
+            wadsrc <= "10";
             rad1src <= "0"; --x
                                 
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
                                 
             CW <= '0'; --x
@@ -513,10 +513,10 @@ begin
             -- self defined                                        
             shiftSrc <= "10";
             amtSrc <= "01"; 
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0"; --x
                                             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
                                             
             CW <= '1'; 
@@ -543,10 +543,10 @@ begin
             -- self defined                                     
             shiftSrc <= "00";
             amtSrc <= "00"; 
-            wadsrc <= "0011";
+            wadsrc <= "11";
             rad1src <= "0"; --x
                                             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
                                             
             CW <= '0'; --x 
@@ -573,10 +573,10 @@ begin
             -- self defined                                           
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "0000"; --x
+            wadsrc <= "00"; --x
             rad1src <= "0"; --x
                                             
-            typ_dt <= "00"; --x
+            typ_dt <= "0000"; --x
             byte_off <= "00"; --x
                                             
             CW <= '0'; --x
@@ -585,6 +585,6 @@ begin
         end if;
         
     end process;
-    
+    state_out <= state;
 end architecture;
 

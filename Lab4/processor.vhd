@@ -25,24 +25,26 @@ entity processor is
         r12: out std_logic_vector(31 downto 0);
         r13: out std_logic_vector(31 downto 0);
         r14: out std_logic_vector(31 downto 0);
-        r15: out std_logic_vector(31 downto 0)
+        r15: out std_logic_vector(31 downto 0);
+        
+        state: out integer
     );
 end entity;
 
 
 architecture beh of processor is
 signal PW_int: std_logic;   -- w
-signal IorD_int: std_logic_vector(1 downto 0); -- Instruction (1) or PC inc. (0)
+signal IorD_int: std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
 signal IRW_int: std_logic; -- Instruction write/save enable
 signal DRW_int: std_logic; -- data register write enable
-signal M2R_int: std_logic_vector(1 downto 0); -- pick data or result to write to register file
+signal M2R_int: std_logic_vector(0 downto 0); -- pick data or result to write to register file
 signal Rsrc_int: std_logic_vector(1 downto 0); -- pick rd or rm for rad2
 signal RW_int: std_logic; -- write enable for register file
 signal AW_int: std_logic;  -- rf out1 store reg write enable
 signal BW_int: std_logic;  -- rf out2 store B reg write enable
 signal XW_int: std_logic;  -- rf out2 store X reg write enable
 signal Asrc1_int: std_logic_vector(0 downto 0); -- pick pc for inc. or rf out1 for calc
-signal Asrc2_int: std_logic_vector(4 downto 0); -- choose from rf out 2 or 4 (for pc+4 step) or Imm or offset for branch
+signal Asrc2_int: std_logic_vector(1 downto 0); -- choose from rf out 2 or 4 (for pc+4 step) or Imm or offset for branch
 signal op_int: std_logic_vector(3 downto 0);  -- op code for alu
 signal Fset_int: std_logic; -- set flags along command
 signal ReW_int: std_logic;  -- reg store write enable
@@ -138,7 +140,7 @@ MC: entity work.main_control port map (
     BW => BW_int,
     XW => XW_int,
     Asrc1 => Asrc1_int,
-    Asrc2 => Asrc1_int,
+    Asrc2 => Asrc2_int,
     op => op_int,
     Fset => Fset_int,
     ReW => ReW_int,
@@ -153,7 +155,8 @@ MC: entity work.main_control port map (
     byte_off => byte_off_int,
     
     CW => CW_int,
-    DW => DW_int
+    DW => DW_int,
+    state_out => state
 );
 BC: entity work.Bctrl port map (
     ins31_28 => ins_int(31 downto 28),
