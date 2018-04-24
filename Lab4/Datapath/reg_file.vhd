@@ -42,9 +42,9 @@ end entity;
 architecture beh of reg_file is
 type reg_arr is array (0 to 15) of std_logic_vector(31 downto 0);
 signal r: reg_arr;
-signal raddr1_in: integer;
-signal raddr2_in: integer;
-signal waddr_in: integer;
+signal raddr1_in: integer:= 0;
+signal raddr2_in: integer:= 0;
+signal waddr_in: integer:= 0;
 begin
     pc <= r(15);
     r(15) <= "00000000000000000000000000000000" when reset = '1';
