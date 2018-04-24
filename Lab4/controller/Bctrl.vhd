@@ -41,7 +41,7 @@ begin
         elsif(ins31_28 = "1100" and ( ((not(z)) and (not(n xor v))) = '1')) then p<='1';
         elsif(ins31_28 = "1101" and ( not((not(z)) and (not(n xor v))) = '1')) then p<='1';
         elsif(ins31_28 = "1110") then p<='1';
-        
+        else p<='0';
         end if;
     end process;
 end architecture;

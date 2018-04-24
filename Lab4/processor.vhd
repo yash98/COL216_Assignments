@@ -50,8 +50,6 @@ signal Fset_int: std_logic; -- set flags along command
 signal ReW_int: std_logic;  -- reg store write enable
 
 -- self defined
-signal clock_int: std_logic;
-
 signal shiftSrc_int: std_logic_vector(1 downto 0);
 signal amtSrc_int: std_logic_vector(1 downto 0);
 signal wadsrc_int: std_logic_vector(1 downto 0);

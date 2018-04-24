@@ -117,10 +117,8 @@ begin
     end process;
 
 result <= res;
-    
-with res select
-flags(3) <= '0' when "00000000000000000000000000000000",
-                     '1' when others;
+flags(3) <= '0' when res = "00000000000000000000000000000000" else
+                     '1';
 flags(2) <= res(31);
 flags(1) <= c31 xor c32;
 flags(0) <= c32 when (not (operation = "1101") and not(operation = "1111")) else c_in_from_shifter;

@@ -73,7 +73,7 @@ signal B: std_logic_vector(31 downto 0);
 signal C: std_logic;
 signal D: std_logic_vector(31 downto 0);
 signal X: std_logic_vector(31 downto 0);
-signal F: std_logic_vector(3 downto 0);
+signal F: std_logic_vector(3 downto 0):="0000";
  
 -- connections
 signal mem_out: std_logic_vector(31 downto 0);
