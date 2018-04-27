@@ -14,10 +14,8 @@ entity reg_file is
         we: in std_logic;
         clock: in std_logic;
         reset: in std_logic;
-        pc_we: in std_logic;
-        pc_write: in std_logic_vector(31 downto 0);
-        
-        pc: out std_logic_vector(31 downto 0);
+--        pc_we: in std_logic;
+--        pc_write: in std_logic_vector(31 downto 0);
         rout1: out std_logic_vector(31 downto 0);
         rout2: out std_logic_vector(31 downto 0);
         r0: out std_logic_vector(31 downto 0);
@@ -46,7 +44,6 @@ signal raddr1_in: integer:= 0;
 signal raddr2_in: integer:= 0;
 signal waddr_in: integer:= 0;
 begin
-    pc <= r(15);
     r(15) <= "00000000000000000000000000000000" when reset = '1';
     
     raddr1_in <= conv_integer(unsigned(raddr1));
@@ -76,9 +73,9 @@ begin
     process(clock)
     begin
         if (rising_edge(clock)) then
-            if (pc_we = '1') then
-                r(15) <= pc_write;
-            end if;
+--            if (pc_we = '1') then
+--                r(15) <= pc_write;
+--            end if;
             if (we = '1') then
                 r(waddr_in) <= winp;
             end if;

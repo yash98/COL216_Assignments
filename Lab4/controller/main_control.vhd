@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
-library UNISIM;  
+library UNISIM;
 
 entity main_control is
     port (
@@ -10,7 +10,7 @@ entity main_control is
         ins: in std_logic_vector(31 downto 0);
         pred: in std_logic;
 
-        PW: out std_logic;   -- write to pc when 1
+--        PW: out std_logic;   -- write to pc when 1
         IorD: out std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
         IRW: out std_logic; -- Instruction write/save enable
         DRW: out std_logic; -- data register write enable
@@ -68,6 +68,8 @@ begin
                     else
                         state <= 15;
                     end if;
+                else
+                    state <= 1;
                 end if;
             
             elsif (state = 2) then
@@ -132,13 +134,13 @@ begin
         
         --PC=PC+4 and IR = Mem[PC]
         if (state = 1) then
-            PW <= '1';
+--            PW <= '1';
             IorD <= "0";
             IRW <= '1';
             DRW <= '0'; --x
-            M2R <= "0"; --x
+            M2R <= "1";
             Rsrc <= "00"; --x
-            RW <= '0'; --x
+            RW <= '1';
             AW <= '0'; --x
             BW <= '0'; --x
             XW <= '0'; --x
@@ -146,12 +148,12 @@ begin
             Asrc2 <= "01";
             op <= "0100";
             Fset <= '0';
-            ReW <= '0';
+            ReW <= '1';
             
             -- self defined            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "00"; --x
+            wadsrc <= "10";
             rad1src <= "0";
             
             typ_dt <= "0000";
@@ -162,13 +164,13 @@ begin
         
         --A=ins[19-16] and B=ins[3-0]    
         elsif (state = 2) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0';
             DRW <= '0'; --x
-            M2R <= "0"; --x
+            M2R <= "1";
             Rsrc <= "01";
-            RW <= '0'; --x
+            RW <= '1';
             AW <= '1';
             BW <= '1';
             XW <= '0'; --x
@@ -181,7 +183,7 @@ begin
             -- self defined            
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "00"; --x
+            wadsrc <= "10"; --x
             rad1src <= "0";
             
             typ_dt <= "0000";
@@ -192,13 +194,13 @@ begin
         
         --X=ins[11-8]
         elsif (state = 3) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0';
             DRW <= '0'; --x
             M2R <= "0"; --x
             Rsrc <= "00";
-            RW <= '0'; --x
+            RW <= '0';
             AW <= '0';
             BW <= '0';
             XW <= '1';
@@ -222,7 +224,7 @@ begin
         
         -- shiftSrc = ins[3-0] and amtSrc = ins[11-8]&'0' and Shifter "ROR" mode    (DP instruction without shift)
         elsif (state = 4) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0';
             DRW <= '0'; --x
@@ -252,7 +254,7 @@ begin
         
         --shiftSrc = "B" and amtSrc = ins[11-7] and Shifter "B" mode    (DP instruction with imm shift amt)            
         elsif (state = 5) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0';
             DRW <= '0'; --x
@@ -282,7 +284,7 @@ begin
         
         -- ShiftSrc = "B" and amtSrc = "X" and Shifter "B" mode    (DP instruction with reg shift amt)
         elsif (state = 6) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0';
             DRW <= '0'; --x
@@ -312,7 +314,7 @@ begin
         
         -- ALU Step 
         elsif (state = 7) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0';
             DRW <= '0'; --x
@@ -325,7 +327,11 @@ begin
             Asrc1 <= "1";
             Asrc2 <= "00"; --x
             op <= ins(24 downto 21); --x
-            Fset <= ins(20);
+            if (ins(24 downto 23) = "10") then
+                Fset <= '1';
+            else
+               Fset <= ins(20);
+            end if;
             ReW <= '1';
             
             -- self defined
@@ -342,7 +348,7 @@ begin
         
         --write back in register
         elsif (state = 8) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x
@@ -373,13 +379,13 @@ begin
         
         --A=ins[15-12] and B=ins[3-0]    
         elsif (state = 9) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x
-            M2R <= "0";
+            M2R <= "1";
             Rsrc <= "01";
-            RW <= '0';
+            RW <= '1';
             AW <= '1'; 
             BW <= '1';
             XW <= '0'; 
@@ -392,7 +398,7 @@ begin
                 -- self defined         
             shiftSrc <= "00"; --x
             amtSrc <= "00"; --x
-            wadsrc <= "00";
+            wadsrc <= "10";
             rad1src <= "0"; --x
                 
             typ_dt <= "0000"; --x
@@ -403,7 +409,7 @@ begin
             
         -- X = ins[11-8]
         elsif (state = 10) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x
@@ -434,7 +440,7 @@ begin
 
         --ALU Step   Asrc2="Mul" and  Asrc1="A" 
         elsif (state = 11) then
-            PW <= '0';
+--            PW <= '0';
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x
@@ -464,7 +470,7 @@ begin
             
         -- writeback to memory   
         elsif (state = 12) then
-            PW <= '0'; 
+--            PW <= '0'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x
@@ -494,18 +500,18 @@ begin
         
         -- b instruction (shiftSrc = ins[24 downto 0] and amtSrc = "1" (int 2) and mode ="LSL" )      
         elsif (state = 13) then
-            PW <= '0'; 
+--            PW <= '0'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x
-            M2R <= "0";
+            M2R <= "1";
             Rsrc <= "00"; --x
-            RW <= '0';
+            RW <= '1';
             AW <= '0'; --x
             BW <= '0'; --x
             XW <= '0'; --x
             Asrc1 <= "1"; --x 
-            Asrc2 <= "00"; --x
+            Asrc2 <= "10"; --x
             op <= "0000"; --x
             Fset <= '0'; 
             ReW <= '0';
@@ -524,7 +530,7 @@ begin
         
         -- bl instruction (initially we store PC+=4 into l register) rest same as b instruction
         elsif (state = 14) then
-            PW <= '0'; 
+--            PW <= '0'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x
@@ -554,7 +560,7 @@ begin
         
         -- PC = PC + offset  and  asrc2='0'(shfter out) and asrc1='0' (PC) 
         elsif (state = 15) then
-            PW <= '1'; 
+--            PW <= '1'; 
             IorD <= "0"; --x
             IRW <= '0'; --x
             DRW <= '0'; --x`

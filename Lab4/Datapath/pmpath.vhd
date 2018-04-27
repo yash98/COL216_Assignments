@@ -18,7 +18,7 @@ entity pmpath is
     );
 end entity;
 
-architecture beh of pmpath is
+ architecture beh of pmpath is
 signal inp: std_logic_vector(31 downto 0);
 signal outp: std_logic_vector(31 downto 0);
 signal prefix_bus: std_logic_vector(23 downto 0);

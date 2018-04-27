@@ -31,7 +31,7 @@ begin
                 result <= zero(31 downto (31- amnt +1)) & a(31 downto amnt);
                 carry <= a(amnt - 1);
             --asr
-            elsif (typ = "10") then     
+            elsif (typ = "10") then
                 if(a(31 downto 31) = "0") then
                     result <= zero(31 downto (31- amnt +1)) & a(31 downto amnt);
                 else

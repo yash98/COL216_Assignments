@@ -27,13 +27,17 @@ entity processor is
         r14: out std_logic_vector(31 downto 0);
         r15: out std_logic_vector(31 downto 0);
         
+        -- test
+        test1_out: out std_logic_vector(31 downto 0);
+        test2_out: out std_logic_vector(31 downto 0);
+        
         state: out integer
     );
 end entity;
 
 
 architecture beh of processor is
-signal PW_int: std_logic;   -- w
+--signal PW_int: std_logic;   -- w
 signal IorD_int: std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
 signal IRW_int: std_logic; -- Instruction write/save enable
 signal DRW_int: std_logic; -- data register write enable
@@ -61,7 +65,6 @@ signal byte_off_int: std_logic_vector(1 downto 0);
 signal CW_int: std_logic;
 signal DW_int: std_logic;
 
-signal pc_out_int: std_logic_vector(31 downto 0);
 signal ins_int: std_logic_vector(31 downto 0);
 signal Flags_int: std_logic_vector(3 downto 0);
 
@@ -70,7 +73,7 @@ signal Flags_int: std_logic_vector(3 downto 0);
 signal pred_int: std_logic;
 begin
 DP: entity work.datapath port map (
-    PW => PW_int,
+--    PW => PW_int,
     IorD => IorD_int,
     IRW => IRW_int,
     DRW => DRW_int,
@@ -101,9 +104,12 @@ DP: entity work.datapath port map (
     CW => CW_int,
     DW => DW_int,
     
-    pc_out => pc_out_int,
     instruction => ins_int,
     Flags => Flags_int,
+    
+    -- test
+    test1_outer => test1_out,
+    test2_outer => test2_out,
     
     r0_out => r0,
     r1_out => r1,
@@ -127,7 +133,7 @@ MC: entity work.main_control port map (
     ins => ins_int,
     pred => pred_int,
 
-    PW => PW_int,
+--    PW => PW_int,
     IorD => IorD_int,
     IRW => IRW_int,
     DRW => DRW_int,

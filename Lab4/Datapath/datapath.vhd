@@ -8,7 +8,7 @@ use ieee.numeric_std;
 entity datapath is
     port (
         -- figure defined inputs from controller
-        PW: in std_logic;   -- write to pc when 1
+--        PW: in std_logic;   -- write to pc when 1
         IorD: in std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
         IRW: in std_logic; -- Instruction write/save enable
         DRW: in std_logic; -- data register write enable
@@ -43,6 +43,10 @@ entity datapath is
         instruction: out std_logic_vector(31 downto 0);
         Flags: out std_logic_vector(3 downto 0);
         
+        -- tests
+        test1_outer: out std_logic_vector(31 downto 0);
+        test2_outer: out std_logic_vector(31 downto 0);
+        
         -- register output
         r0_out: out std_logic_vector(31 downto 0);
         r1_out: out std_logic_vector(31 downto 0);
@@ -65,14 +69,14 @@ end entity;
 
 architecture beh of datapath is
 -- registers
-signal IR: std_logic_vector(31 downto 0);
-signal DR: std_logic_vector(31 downto 0);
-signal RES: std_logic_vector(31 downto 0);
-signal A: std_logic_vector(31 downto 0);
-signal B: std_logic_vector(31 downto 0);
-signal C: std_logic;
-signal D: std_logic_vector(31 downto 0);
-signal X: std_logic_vector(31 downto 0);
+signal IR: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
+signal DR: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
+signal RES: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
+signal A: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
+signal B: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
+signal C: std_logic:='0';
+signal D: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
+signal X: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
 signal F: std_logic_vector(3 downto 0):="0000";
  
 -- connections
@@ -93,7 +97,7 @@ signal b_off_out: std_logic_vector(31 downto 0);
 signal four: std_logic_vector(31 downto 0):= "00000000000000000000000000000100";
 signal res_out: std_logic_vector(31 downto 0);
 signal IorD_out: std_logic_vector(31 downto 0);
-signal pc_o: std_logic_vector(31 downto 0);
+signal r15_out_int: std_logic_vector(31 downto 0);
 signal mul_out: std_logic_vector(31 downto 0);
 
 signal wadsrc_out: std_logic_vector(3 downto 0);
@@ -124,9 +128,8 @@ RF: entity work.reg_file port map (
     clock => clock,
     reset => pc_reset,
     
-    pc_we => PW,
-    pc_write => alu_out,
-    pc => pc_o,
+--    pc_we => PW,
+--    pc_write => alu_out,
     rout1 => rd1_out,
     rout2 => rd2_out,
     r0 => r0_out,
@@ -144,9 +147,9 @@ RF: entity work.reg_file port map (
     r12 => r12_out,
     r13 => r13_out,
     r14 => r14_out,
-    r15 => r15_out
+    r15 => r15_out_int
 );
-pc_out <= pc_o;
+r15_out <= r15_out_int;
 
 MEM: entity work.memory_block_wrapper port map (
     BRAM_PORTA_0_addr => IorD_out,
@@ -197,16 +200,16 @@ amtSrc_out <= X(4 downto 0) when amtSrc = "00" else
                 IR(11 downto 8) & "0" when amtSrc = "11";
 
 -- Asrc2 mux
-Asrc2_out <= shifter_out when Asrc2 = "00" else
+Asrc2_out <= D when Asrc2 = "00" else
                 four when Asrc2 = "01" else
                 mul_out;
 
 -- Asrc1 mux
-Asrc1_out <= pc_o when Asrc1 = "0" else
+Asrc1_out <= r15_out_int when Asrc1 = "0" else
                 A;
                 
 -- IorD mux
-IorD_out <= pc_o when IorD = "0" else
+IorD_out <= r15_out_int when IorD = "0" else
             RES;
             
 -- Rsrc mux
@@ -248,4 +251,7 @@ DR <= mem_out when DRW = '1';
 
 
 instruction <= IR;
+-- tests
+test1_outer <= mem_out;
+test2_outer <= IR;
 end architecture;
