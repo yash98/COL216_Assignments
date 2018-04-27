@@ -172,7 +172,7 @@ begin
        --PC=RES
        elsif (state = 1) then
            IorD <= "0";
-           IRW <= '1';
+           IRW <= '0';
            DRW <= '0'; --x
            M2R <= "1";
            Rsrc <= "00"; --x
@@ -427,9 +427,9 @@ begin
            IorD <= "0"; --x
            IRW <= '0'; --x
            DRW <= '0'; --x
-           M2R <= "1";
+           M2R <= "0";
            Rsrc <= "01";
-           RW <= '1';
+           RW <= '0';
            AW <= '1'; 
            BW <= '1';
            XW <= '0'; 
@@ -552,9 +552,9 @@ begin
            IorD <= "0"; --x
            IRW <= '0'; --x
            DRW <= '0'; --x
-           M2R <= "1";
+           M2R <= "0";
            Rsrc <= "00"; --x
-           RW <= '1';
+           RW <= '0';
            AW <= '0'; --x
            BW <= '0'; --x
            XW <= '0'; --x
