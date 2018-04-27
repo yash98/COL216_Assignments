@@ -14,8 +14,6 @@ entity reg_file is
         we: in std_logic;
         clock: in std_logic;
         reset: in std_logic;
---        pc_we: in std_logic;
---        pc_write: in std_logic_vector(31 downto 0);
         rout1: out std_logic_vector(31 downto 0);
         rout2: out std_logic_vector(31 downto 0);
         r0: out std_logic_vector(31 downto 0);
@@ -44,40 +42,37 @@ signal raddr1_in: integer:= 0;
 signal raddr2_in: integer:= 0;
 signal waddr_in: integer:= 0;
 begin
-    r(15) <= "00000000000000000000000000000000" when reset = '1';
-    
-    raddr1_in <= conv_integer(unsigned(raddr1));
-    raddr2_in <= conv_integer(unsigned(raddr2));
-    waddr_in <= conv_integer(unsigned(waddr));
-    
-    rout1 <= r(raddr1_in);
-    rout2 <= r(raddr2_in);
-    
-    r0 <= r(0);
-    r1 <= r(1);
-    r2 <= r(2);
-    r3 <= r(3);
-    r4 <= r(4);
-    r5 <= r(5);
-    r6 <= r(6);
-    r7 <= r(7);
-    r8 <= r(8);
-    r9 <= r(9);
-    r10 <= r(10);
-    r11 <= r(11);
-    r12 <= r(12);
-    r13 <= r(13);
-    r14 <= r(14);
-    r15 <= r(15);
-    
     process(clock)
     begin
+        raddr1_in <= conv_integer(unsigned(raddr1));
+        raddr2_in <= conv_integer(unsigned(raddr2));
+        waddr_in <= conv_integer(unsigned(waddr));
+        
+        rout1 <= r(raddr1_in);
+        rout2 <= r(raddr2_in);
+        
+        r0 <= r(0);
+        r1 <= r(1);
+        r2 <= r(2);
+        r3 <= r(3);
+        r4 <= r(4);
+        r5 <= r(5);
+        r6 <= r(6);
+        r7 <= r(7);
+        r8 <= r(8);
+        r9 <= r(9);
+        r10 <= r(10);
+        r11 <= r(11);
+        r12 <= r(12);
+        r13 <= r(13);
+        r14 <= r(14);
+        r15 <= r(15);
         if (rising_edge(clock)) then
---            if (pc_we = '1') then
---                r(15) <= pc_write;
---            end if;
             if (we = '1') then
                 r(waddr_in) <= winp;
+                if (reset = '1') then
+                    r(15) <= "00000000000000000000000000000000";
+                end if;
             end if;
         end if;
     end process;

@@ -54,6 +54,7 @@ signal Fset_int: std_logic; -- set flags along command
 signal ReW_int: std_logic;  -- reg store write enable
 
 -- self defined
+signal memw_int: std_logic_vector(3 downto 0); 
 signal shiftSrc_int: std_logic_vector(1 downto 0);
 signal amtSrc_int: std_logic_vector(1 downto 0);
 signal wadsrc_int: std_logic_vector(1 downto 0);
@@ -92,6 +93,7 @@ DP: entity work.datapath port map (
     -- self defined
     clock => cl,
     pc_reset => pc_res,
+    memw => memw_int,
     
     shiftSrc => shiftSrc_int,
     amtSrc => amtSrc_int,
@@ -150,6 +152,7 @@ MC: entity work.main_control port map (
     ReW => ReW_int,
     
     --self defined
+    memw => memw_int,
     shiftSrc => shiftSrc_int,
     amtSrc => amtSrc_int,
     wadsrc => wadsrc_int,

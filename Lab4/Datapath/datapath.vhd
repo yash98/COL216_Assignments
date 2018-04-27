@@ -35,6 +35,7 @@ entity datapath is
         
         typ_dt: in std_logic_vector(3 downto 0);
         byte_off: in std_logic_vector(1 downto 0);
+        memw: in std_logic_vector(3 downto 0);
         
         CW: in std_logic;
         DW: in std_logic;
@@ -104,6 +105,7 @@ signal wadsrc_out: std_logic_vector(3 downto 0);
 signal rad1src_out: std_logic_vector(3 downto 0);
 
 signal MW: std_logic_vector(3 downto 0);
+signal MW_int: std_logic_vector(3 downto 0);
 signal data_to_mem_int: std_logic_vector(31 downto 0);
 signal data_to_reg_int: std_logic_vector(31 downto 0);
 
@@ -159,6 +161,7 @@ MEM: entity work.memory_block_wrapper port map (
     BRAM_PORTA_0_en => '1',
     BRAM_PORTA_0_we => MW
 );
+MW <= memw and MW_int;
 
 SHIFTER: entity work.shifter port map (
     a => shiftSrc_out,
@@ -183,7 +186,7 @@ P2M: entity work.pmpath port map (
     
     data_to_mem => data_to_mem_int,
     data_to_reg => data_to_reg_int,
-    mem_write_en => MW
+    mem_write_en => MW_int
 );
 
 -- all muxes
@@ -252,6 +255,6 @@ DR <= mem_out when DRW = '1';
 
 instruction <= IR;
 -- tests
-test1_outer <= mem_out;
-test2_outer <= IR;
+test1_outer <= alu_out;
+test2_outer <= RES;
 end architecture;
