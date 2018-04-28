@@ -137,510 +137,510 @@ begin
         
     end process;
     
-    process(clock)
-    begin
-     --IR = Mem[PC] and RES = PC + 4
-       if (state = 0) then
-           IorD <= "0";
-           IRW <= '1';
-           DRW <= '0'; --x
-           M2R <= "1";
-           Rsrc <= "00"; --x
-           RW <= '0';
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "0";
-           Asrc2 <= "01";
-           op <= "0100";
-           Fset <= '0';
-           ReW <= '1';
+    -- process(clock)
+    -- begin
+    --  --IR = Mem[PC] and RES = PC + 4
+    --    if (state = 0) then
+    --        IorD <= "0";
+    --        IRW <= '1';
+    --        DRW <= '0'; --x
+    --        M2R <= "1";
+    --        Rsrc <= "00"; --x
+    --        RW <= '0';
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "0";
+    --        Asrc2 <= "01";
+    --        op <= "0100";
+    --        Fset <= '0';
+    --        ReW <= '1';
            
-           -- self defined            
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "00"; --x
-           rad1src <= "0";
+    --        -- self defined            
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0";
            
-           typ_dt <= "0000";
-           byte_off <= "00";
+    --        typ_dt <= "0000";
+    --        byte_off <= "00";
            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
-       --PC=RES
-       elsif (state = 1) then
-           IorD <= "0";
-           IRW <= '0';
-           DRW <= '0'; --x
-           M2R <= "1";
-           Rsrc <= "00"; --x
-           RW <= '1';
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "0";
-           Asrc2 <= "01";
-           op <= "0100";
-           Fset <= '0';
-           ReW <= '0';
+    --    --PC=RES
+    --    elsif (state = 1) then
+    --        IorD <= "0";
+    --        IRW <= '0';
+    --        DRW <= '0'; --x
+    --        M2R <= "1";
+    --        Rsrc <= "00"; --x
+    --        RW <= '1';
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "0";
+    --        Asrc2 <= "01";
+    --        op <= "0100";
+    --        Fset <= '0';
+    --        ReW <= '0';
            
-           -- self defined            
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "10";
-           rad1src <= "0";
+    --        -- self defined            
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "10";
+    --        rad1src <= "0";
            
-           typ_dt <= "0000";
-           byte_off <= "00";
+    --        typ_dt <= "0000";
+    --        byte_off <= "00";
            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
-       --A=ins[19-16] and B=ins[3-0]    
-       elsif (state = 2) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0';
-           DRW <= '0'; --x
-           M2R <= "1";
-           Rsrc <= "01";
-           RW <= '0';
-           AW <= '1';
-           BW <= '1';
-           XW <= '0'; --x
-           Asrc1 <= "1"; --x
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0'; --x
-           ReW <= '0'; --x
+    --    --A=ins[19-16] and B=ins[3-0]    
+    --    elsif (state = 2) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0';
+    --        DRW <= '0'; --x
+    --        M2R <= "1";
+    --        Rsrc <= "01";
+    --        RW <= '0';
+    --        AW <= '1';
+    --        BW <= '1';
+    --        XW <= '0'; --x
+    --        Asrc1 <= "1"; --x
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0'; --x
+    --        ReW <= '0'; --x
            
-           -- self defined            
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "00"; --x
-           rad1src <= "0";
+    --        -- self defined            
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0";
            
-           typ_dt <= "0000";
-           byte_off <= "00";
+    --        typ_dt <= "0000";
+    --        byte_off <= "00";
            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
-       --X=ins[11-8]
-       elsif (state = 3) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0';
-           DRW <= '0'; --x
-           M2R <= "0"; --x
-           Rsrc <= "00";
-           RW <= '0';
-           AW <= '0';
-           BW <= '0';
-           XW <= '1';
-           Asrc1 <= "1";
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0';
-           ReW <= '0';
+    --    --X=ins[11-8]
+    --    elsif (state = 3) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0';
+    --        DRW <= '0'; --x
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00";
+    --        RW <= '0';
+    --        AW <= '0';
+    --        BW <= '0';
+    --        XW <= '1';
+    --        Asrc1 <= "1";
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0';
+    --        ReW <= '0';
            
-           -- self defined
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "00"; --x
-           rad1src <= "0"; --x
+    --        -- self defined
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0"; --x
            
-           typ_dt <= "0000";
-           byte_off <= "00";
+    --        typ_dt <= "0000";
+    --        byte_off <= "00";
            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
-       -- shiftSrc = ins[3-0] and amtSrc = ins[11-8]&'0' and Shifter "ROR" mode    (DP instruction without shift)
-       elsif (state = 4) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0';
-           DRW <= '0'; --x
-           M2R <= "0"; --x
-           Rsrc <= "00"; --x
-           RW <= '0'; --x
-           AW <= '0';
-           BW <= '0';
-           XW <= '0';
-           Asrc1 <= "1";
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0';
-           ReW <= '0';
+    --    -- shiftSrc = ins[3-0] and amtSrc = ins[11-8]&'0' and Shifter "ROR" mode    (DP instruction without shift)
+    --    elsif (state = 4) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0';
+    --        DRW <= '0'; --x
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00"; --x
+    --        RW <= '0'; --x
+    --        AW <= '0';
+    --        BW <= '0';
+    --        XW <= '0';
+    --        Asrc1 <= "1";
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0';
+    --        ReW <= '0';
            
-           -- self defined
-           shiftSrc <= "01";
-           amtSrc <= "11";
-           wadsrc <= "00"; --x
-           rad1src <= "0"; --x
+    --        -- self defined
+    --        shiftSrc <= "01";
+    --        amtSrc <= "11";
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0"; --x
            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
            
-           CW <= '1';
-           DW <= '1';
-           memw <= "0000";
+    --        CW <= '1';
+    --        DW <= '1';
+    --        memw <= "0000";
        
-       --shiftSrc = "B" and amtSrc = ins[11-7] and Shifter "B" mode    (DP instruction with imm shift amt)            
-       elsif (state = 5) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0';
-           DRW <= '0'; --x
-           M2R <= "0"; --x
-           Rsrc <= "00"; --x
-           RW <= '0'; --x
-           AW <= '0';
-           BW <= '0';
-           XW <= '0';
-           Asrc1 <= "1";
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0';
-           ReW <= '0';
+    --    --shiftSrc = "B" and amtSrc = ins[11-7] and Shifter "B" mode    (DP instruction with imm shift amt)            
+    --    elsif (state = 5) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0';
+    --        DRW <= '0'; --x
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00"; --x
+    --        RW <= '0'; --x
+    --        AW <= '0';
+    --        BW <= '0';
+    --        XW <= '0';
+    --        Asrc1 <= "1";
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0';
+    --        ReW <= '0';
            
-           -- self defined
-           shiftSrc <= "00";
-           amtSrc <= "10";
-           wadsrc <= "00"; --x
-           rad1src <= "0"; --x
+    --        -- self defined
+    --        shiftSrc <= "00";
+    --        amtSrc <= "10";
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0"; --x
            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
            
-           CW <= '1';
-           DW <= '1';
-           memw <= "0000";
+    --        CW <= '1';
+    --        DW <= '1';
+    --        memw <= "0000";
        
-       -- ShiftSrc = "B" and amtSrc = "X" and Shifter "B" mode    (DP instruction with reg shift amt)
-       elsif (state = 6) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0';
-           DRW <= '0'; --x
-           M2R <= "0"; --x
-           Rsrc <= "00"; --x
-           RW <= '0'; --x
-           AW <= '0';
-           BW <= '0';
-           XW <= '0';
-           Asrc1 <= "1";
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0';
-           ReW <= '0';
+    --    -- ShiftSrc = "B" and amtSrc = "X" and Shifter "B" mode    (DP instruction with reg shift amt)
+    --    elsif (state = 6) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0';
+    --        DRW <= '0'; --x
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00"; --x
+    --        RW <= '0'; --x
+    --        AW <= '0';
+    --        BW <= '0';
+    --        XW <= '0';
+    --        Asrc1 <= "1";
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0';
+    --        ReW <= '0';
            
-           -- self defined
-           shiftSrc <= "00";
-           amtSrc <= "00";
-           wadsrc <= "00"; --x
-           rad1src <= "0"; --x
+    --        -- self defined
+    --        shiftSrc <= "00";
+    --        amtSrc <= "00";
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0"; --x
            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
            
-           CW <= '1';
-           DW <= '1';
-           memw <= "0000";
+    --        CW <= '1';
+    --        DW <= '1';
+    --        memw <= "0000";
        
-       -- ALU Step 
-       elsif (state = 7) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0';
-           DRW <= '0'; --x
-           M2R <= "0"; --x
-           Rsrc <= "00"; --x
-           RW <= '0'; --x
-           AW <= '0';
-           BW <= '0';
-           XW <= '0';
-           Asrc1 <= "1";
-           Asrc2 <= "00"; --x
-           op <= ins(24 downto 21); --x
-           if (ins(24 downto 23) = "10") then
-               Fset <= '1';
-           else
-              Fset <= ins(20);
-           end if;
-           ReW <= '1';
+    --    -- ALU Step 
+    --    elsif (state = 7) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0';
+    --        DRW <= '0'; --x
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00"; --x
+    --        RW <= '0'; --x
+    --        AW <= '0';
+    --        BW <= '0';
+    --        XW <= '0';
+    --        Asrc1 <= "1";
+    --        Asrc2 <= "00"; --x
+    --        op <= ins(24 downto 21); --x
+    --        if (ins(24 downto 23) = "10") then
+    --            Fset <= '1';
+    --        else
+    --           Fset <= ins(20);
+    --        end if;
+    --        ReW <= '1';
            
-           -- self defined
-           shiftSrc <= "00";
-           amtSrc <= "00";
-           wadsrc <= "00"; --x
-           rad1src <= "0"; --x
+    --        -- self defined
+    --        shiftSrc <= "00";
+    --        amtSrc <= "00";
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0"; --x
            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
            
-           CW <= '0';
-           DW <= '0';
-           memw <= "0000";
+    --        CW <= '0';
+    --        DW <= '0';
+    --        memw <= "0000";
        
-       --write back in register
-       elsif (state = 8) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x
-           M2R <= "1";
-           Rsrc <= "00"; --x
-           RW <= '1'; 
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "1"; --x
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0';
-           ReW <= '0';
+    --    --write back in register
+    --    elsif (state = 8) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x
+    --        M2R <= "1";
+    --        Rsrc <= "00"; --x
+    --        RW <= '1'; 
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "1"; --x
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0';
+    --        ReW <= '0';
            
-           -- self defined
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "00";
-           rad1src <= "0"; --x
+    --        -- self defined
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "00";
+    --        rad1src <= "0"; --x
            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
        
-       --A=ins[15-12] and B=ins[3-0]    
-       elsif (state = 9) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x
-           M2R <= "0";
-           Rsrc <= "01";
-           RW <= '0';
-           AW <= '1'; 
-           BW <= '1';
-           XW <= '0'; 
-           Asrc1 <= "0"; 
-           Asrc2 <= "00";
-           op <= "0000"; --x
-           Fset <= '0';
-           ReW <= '0'; --x
+    --    --A=ins[15-12] and B=ins[3-0]    
+    --    elsif (state = 9) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x
+    --        M2R <= "0";
+    --        Rsrc <= "01";
+    --        RW <= '0';
+    --        AW <= '1'; 
+    --        BW <= '1';
+    --        XW <= '0'; 
+    --        Asrc1 <= "0"; 
+    --        Asrc2 <= "00";
+    --        op <= "0000"; --x
+    --        Fset <= '0';
+    --        ReW <= '0'; --x
                
-               -- self defined         
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "10";
-           rad1src <= "1"; --x
+    --            -- self defined         
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "10";
+    --        rad1src <= "1"; --x
                
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
                
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";        
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";        
            
-       -- X = ins[11-8]
-       elsif (state = 10) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x
-           M2R <= "0"; --x
-           Rsrc <= "00";
-           RW <= '0';
-           AW <= '0'; 
-           BW <= '0';
-           XW <= '1'; 
-           Asrc1 <= "1"; --x 
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0'; --x
-           ReW <= '0'; --x
+    --    -- X = ins[11-8]
+    --    elsif (state = 10) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00";
+    --        RW <= '0';
+    --        AW <= '0'; 
+    --        BW <= '0';
+    --        XW <= '1'; 
+    --        Asrc1 <= "1"; --x 
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0'; --x
+    --        ReW <= '0'; --x
                            
-           -- self defined                     
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "00";
-           rad1src <= "0"; --x
+    --        -- self defined                     
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "00";
+    --        rad1src <= "0"; --x
                            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
                            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";       
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";       
     
     
-       --ALU Step   Asrc2="Mul" and  Asrc1="A" 
-       elsif (state = 11) then
-    --            PW <= '0';
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x
-           M2R <= "0"; --x
-           Rsrc <= "00"; --x
-           RW <= '0';
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "1"; --x 
-           Asrc2 <= "10"; --x
-           op <= ins(24 downto 21); --x
-           Fset <= ins(20); 
-           ReW <= '1';
+    --    --ALU Step   Asrc2="Mul" and  Asrc1="A" 
+    --    elsif (state = 11) then
+    -- --            PW <= '0';
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00"; --x
+    --        RW <= '0';
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "1"; --x 
+    --        Asrc2 <= "10"; --x
+    --        op <= ins(24 downto 21); --x
+    --        Fset <= ins(20); 
+    --        ReW <= '1';
            
-           -- self defined                    
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "00";
-           rad1src <= "0"; --x
+    --        -- self defined                    
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "00";
+    --        rad1src <= "0"; --x
                            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
                            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";       
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";       
            
-       -- writeback to memory   
-       elsif (state = 12) then
-    --            PW <= '0'; 
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x
-           M2R <= "1";
-           Rsrc <= "00"; --x
-           RW <= '1';
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "1"; --x 
-           Asrc2 <= "00"; --x
-           op <= "0000"; --x
-           Fset <= '0'; 
-           ReW <= '0';
+    --    -- writeback to memory   
+    --    elsif (state = 12) then
+    -- --            PW <= '0'; 
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x
+    --        M2R <= "1";
+    --        Rsrc <= "00"; --x
+    --        RW <= '1';
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "1"; --x 
+    --        Asrc2 <= "00"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0'; 
+    --        ReW <= '0';
                                
-               -- self defined                           
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "10";
-           rad1src <= "0"; --x
+    --            -- self defined                           
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "10";
+    --        rad1src <= "0"; --x
                                
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
                                
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
-       -- b instruction (shiftSrc = ins[24 downto 0] and amtSrc = "1" (int 2) and mode ="LSL" )      
-       elsif (state = 13) then
-    --            PW <= '0'; 
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x
-           M2R <= "0";
-           Rsrc <= "00"; --x
-           RW <= '0';
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "1"; --x 
-           Asrc2 <= "10"; --x
-           op <= "0000"; --x
-           Fset <= '0'; 
-           ReW <= '0';
+    --    -- b instruction (shiftSrc = ins[24 downto 0] and amtSrc = "1" (int 2) and mode ="LSL" )      
+    --    elsif (state = 13) then
+    -- --            PW <= '0'; 
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x
+    --        M2R <= "0";
+    --        Rsrc <= "00"; --x
+    --        RW <= '0';
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "1"; --x 
+    --        Asrc2 <= "10"; --x
+    --        op <= "0000"; --x
+    --        Fset <= '0'; 
+    --        ReW <= '0';
                                            
-           -- self defined                                        
-           shiftSrc <= "10";
-           amtSrc <= "01"; 
-           wadsrc <= "00"; --x
-           rad1src <= "0"; --x
+    --        -- self defined                                        
+    --        shiftSrc <= "10";
+    --        amtSrc <= "01"; 
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0"; --x
                                            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
                                            
-           CW <= '1'; 
-           DW <= '1';
-           memw <= "0000";
+    --        CW <= '1'; 
+    --        DW <= '1';
+    --        memw <= "0000";
        
-       -- bl instruction (initially we store PC+=4 into l register) rest same as b instruction
-       elsif (state = 14) then
-    --            PW <= '0'; 
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x
-           M2R <= "1";
-           Rsrc <= "00"; --x
-           RW <= '1';
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "0"; 
-           Asrc2 <= "00"; 
-           op <= "0000"; --x
-           Fset <= '0'; 
-           ReW <= '1';
+    --    -- bl instruction (initially we store PC+=4 into l register) rest same as b instruction
+    --    elsif (state = 14) then
+    -- --            PW <= '0'; 
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x
+    --        M2R <= "1";
+    --        Rsrc <= "00"; --x
+    --        RW <= '1';
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "0"; 
+    --        Asrc2 <= "00"; 
+    --        op <= "0000"; --x
+    --        Fset <= '0'; 
+    --        ReW <= '1';
                                            
-           -- self defined                                     
-           shiftSrc <= "00";
-           amtSrc <= "00"; 
-           wadsrc <= "11";
-           rad1src <= "0"; --x
+    --        -- self defined                                     
+    --        shiftSrc <= "00";
+    --        amtSrc <= "00"; 
+    --        wadsrc <= "11";
+    --        rad1src <= "0"; --x
                                            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
                                            
-           CW <= '0'; --x 
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x 
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
-       -- PC = PC + offset  and  asrc2='0'(shfter out) and asrc1='0' (PC) 
-       elsif (state = 15) then
-    --            PW <= '1'; 
-           IorD <= "0"; --x
-           IRW <= '0'; --x
-           DRW <= '0'; --x`
-           M2R <= "0"; --x
-           Rsrc <= "00"; --x
-           RW <= '0'; --x
-           AW <= '0'; --x
-           BW <= '0'; --x
-           XW <= '0'; --x
-           Asrc1 <= "0";
-           Asrc2 <= "00";
-           op <= "0100";
-           Fset <= '0'; 
-           ReW <= '0';
+    --    -- PC = PC + offset  and  asrc2='0'(shfter out) and asrc1='0' (PC) 
+    --    elsif (state = 15) then
+    -- --            PW <= '1'; 
+    --        IorD <= "0"; --x
+    --        IRW <= '0'; --x
+    --        DRW <= '0'; --x`
+    --        M2R <= "0"; --x
+    --        Rsrc <= "00"; --x
+    --        RW <= '0'; --x
+    --        AW <= '0'; --x
+    --        BW <= '0'; --x
+    --        XW <= '0'; --x
+    --        Asrc1 <= "0";
+    --        Asrc2 <= "00";
+    --        op <= "0100";
+    --        Fset <= '0'; 
+    --        ReW <= '0';
                                            
-           -- self defined                                           
-           shiftSrc <= "00"; --x
-           amtSrc <= "00"; --x
-           wadsrc <= "00"; --x
-           rad1src <= "0"; --x
+    --        -- self defined                                           
+    --        shiftSrc <= "00"; --x
+    --        amtSrc <= "00"; --x
+    --        wadsrc <= "00"; --x
+    --        rad1src <= "0"; --x
                                            
-           typ_dt <= "0000"; --x
-           byte_off <= "00"; --x
+    --        typ_dt <= "0000"; --x
+    --        byte_off <= "00"; --x
                                            
-           CW <= '0'; --x
-           DW <= '0'; --x
-           memw <= "0000";
+    --        CW <= '0'; --x
+    --        DW <= '0'; --x
+    --        memw <= "0000";
        
-       end if;
-    end process;    
+    --    end if;
+    -- end process;    
     state_out <= state;
     
     IorD <= "0" when state = 0 else
