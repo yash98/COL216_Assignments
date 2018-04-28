@@ -743,7 +743,7 @@ begin
             '0' when state = 11 else
             '1' when state = 12 else
             '0' when state = 13 else
-            '0' when state = 14 else
+            '1' when state = 14 else
             '0' when state = 15;
        
      AW <= '0' when state = 0 else
@@ -851,7 +851,57 @@ begin
          "0000" when state = 14 else
          "0100" when state = 15;
         
-        
+     Fset <= '0' when state = 0 else
+            '0' when state = 1 else
+            '0' when state = 2 else
+            '1' when state = 3 else
+            '0' when state = 4 else
+            '0' when state = 5 else
+            '0' when state = 6 else
+            '1' when state = 7 and ins(24 downto 23) = "10" else
+            ins(20) when state = 7 else
+            '0' when state = 8 else
+            '0' when state = 9 else
+            '1' when state = 10 else
+            '0' when state = 11 else
+            '0' when state = 12 else
+            '0' when state = 13 else
+            '0' when state = 14 else
+            '0' when state = 15;
+            
+    ReW <= '1' when state = 0 else
+            '0' when state = 1 else
+            '0' when state = 2 else
+            '0' when state = 3 else
+            '0' when state = 4 else
+            '0' when state = 5 else
+            '0' when state = 6 else
+            '1' when state = 7 else
+            '0' when state = 8 else
+            '0' when state = 9 else
+            '0' when state = 10 else
+            '1' when state = 11 else
+            '0' when state = 12 else
+            '0' when state = 13 else
+            '1' when state = 14 else
+            '0' when state = 15;
+    
+    shiftSrc <= "00" when state = 0 else
+            "00" when state = 1 else
+            "01" when state = 2 else
+            "00" when state = 3 else
+            "00" when state = 4 else
+            "00" when state = 5 else
+            "00" when state = 6 else
+            "00" when state = 7 else
+            "00" when state = 8 else
+            "01" when state = 9 else
+            "00" when state = 10 else
+            "00" when state = 11 else
+            "00" when state = 12 else
+            "00" when state = 13 else
+            "00" when state = 14 else
+            "00" when state = 15;    
         
             
 end architecture;
