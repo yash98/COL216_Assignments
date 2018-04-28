@@ -660,8 +660,8 @@ begin
             "0" when state = 14 else
             "0" when state = 15;
 
-    IRW <= '1' when state = 0 else
-            '0' when state = 1 else
+    IRW <= '0' when state = 0 else
+            '1' when state = 1 else
             '0' when state = 2 else
             '0' when state = 3 else
             '0' when state = 4 else
@@ -694,9 +694,9 @@ begin
             '0' when state = 14 else
             '0' when state = 15;
             
-    M2R <= "0" when state = 0 else
+    M2R <= "1" when state = 0 else
             "1" when state = 1 else
-            "0" when state = 2 else
+            "1" when state = 2 else
             "0" when state = 3 else
             "0" when state = 4 else
             "0" when state = 5 else
@@ -920,7 +920,7 @@ begin
             "00" when state = 14 else
             "00" when state = 15;   
             
-    wadSrc <= "00" when state = 0 else
+    wadSrc <= "10" when state = 0 else
             "10" when state = 1 else
             "00" when state = 2 else
             "00" when state = 3 else
@@ -938,21 +938,21 @@ begin
             "00" when state = 15;   
                 
         rad1src <= "0" when state = 0 else
-            "0" when state = 1 else
-            "0" when state = 2 else
-            "0" when state = 3 else
-            "0" when state = 4 else
-            "0" when state = 5 else
-            "0" when state = 6 else
-            "0" when state = 7 else
-            "0" when state = 8 else
-            "1" when state = 9 else
-            "0" when state = 10 else
-            "0" when state = 11 else
-            "0" when state = 12 else
-            "0" when state = 13 else
-            "0" when state = 14 else
-            "0" when state = 15;
+                "0" when state = 1 else
+                "0" when state = 2 else
+                "0" when state = 3 else
+                "0" when state = 4 else
+                "0" when state = 5 else
+                "0" when state = 6 else
+                "0" when state = 7 else
+                "0" when state = 8 else
+                "1" when state = 9 else
+                "0" when state = 10 else
+                "0" when state = 11 else
+                "0" when state = 12 else
+                "0" when state = 13 else
+                "0" when state = 14 else
+                "0" when state = 15;
             
             
         typ_dt <= "0000" when state = 0 else

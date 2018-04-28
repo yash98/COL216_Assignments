@@ -74,7 +74,6 @@ signal Flags_int: std_logic_vector(3 downto 0);
 signal pred_int: std_logic;
 begin
 DP: entity work.datapath port map (
---    PW => PW_int,
     IorD => IorD_int,
     IRW => IRW_int,
     DRW => DRW_int,
@@ -135,7 +134,6 @@ MC: entity work.main_control port map (
     ins => ins_int,
     pred => pred_int,
 
---    PW => PW_int,
     IorD => IorD_int,
     IRW => IRW_int,
     DRW => DRW_int,

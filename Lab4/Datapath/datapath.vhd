@@ -78,7 +78,7 @@ signal B: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
 signal C: std_logic:='0';
 signal D: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
 signal X: std_logic_vector(31 downto 0):="00000000000000000000000000000000";
-signal F: std_logic_vector(3 downto 0):="0000";
+signal F: std_logic_vector(3 downto 0):="1000";
  
 -- connections
 signal mem_out: std_logic_vector(31 downto 0);
@@ -220,7 +220,7 @@ Rsrc_out <= IR(3 downto 0) when Rsrc = "0" else
             IR(15 downto 12);
             
 -- m2r mux
-m2r_out <= data_to_reg_int when dr = "0" else
+m2r_out <= data_to_reg_int when m2r = "0" else
             RES;
             
 -- wadsrc mux
@@ -230,7 +230,8 @@ wadsrc_out <= IR(15 downto 12) when wadsrc = "00" else
                 "1110";
 
 -- rad1src 
-rad1src_out <= IR(19 downto 16) when rad1src = "0" else IR(15 downto 12);
+rad1src_out <= IR(19 downto 16) when rad1src = "0" else 
+                IR(15 downto 12);
 
 -- datapath internal registers
 -- flags registers
@@ -242,8 +243,8 @@ RES <= alu_out when ReW = '1';
 
 --  A and B and X reg
 A <= rd1_out when AW = '1';
-B <= rd2_out when BW = '1';
-X <= rd2_out when XW = '1';
+B <= rd2_out when rising_edge(BW);
+X <= rd2_out when rising_edge(XW);
 
 C <= c_from_shifter when CW = '1';
 D <= shifter_out when DW = '1';
@@ -255,6 +256,6 @@ DR <= mem_out when DRW = '1';
 
 instruction <= IR;
 -- tests
-test1_outer <= alu_out;
+test1_outer <= mul_out;
 test2_outer <= RES;
 end architecture;
