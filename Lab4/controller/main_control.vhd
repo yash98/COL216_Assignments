@@ -443,7 +443,7 @@ begin
            shiftSrc <= "00"; --x
            amtSrc <= "00"; --x
            wadsrc <= "10";
-           rad1src <= "0"; --x
+           rad1src <= "1"; --x
                
            typ_dt <= "0000"; --x
            byte_off <= "00"; --x
