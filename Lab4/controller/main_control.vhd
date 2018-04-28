@@ -888,21 +888,160 @@ begin
     
     shiftSrc <= "00" when state = 0 else
             "00" when state = 1 else
-            "01" when state = 2 else
+            "00" when state = 2 else
+            "00" when state = 3 else
+            "01" when state = 4 else
+            "00" when state = 5 else
+            "00" when state = 6 else
+            "00" when state = 7 else
+            "00" when state = 8 else
+            "00" when state = 9 else
+            "00" when state = 10 else
+            "00" when state = 11 else
+            "00" when state = 12 else
+            "10" when state = 13 else
+            "00" when state = 14 else
+            "00" when state = 15;    
+            
+    amtSrc <= "00" when state = 0 else
+            "00" when state = 1 else
+            "00" when state = 2 else
+            "00" when state = 3 else
+            "11" when state = 4 else
+            "10" when state = 5 else
+            "00" when state = 6 else
+            "00" when state = 7 else
+            "00" when state = 8 else
+            "00" when state = 9 else
+            "00" when state = 10 else
+            "00" when state = 11 else
+            "00" when state = 12 else
+            "01" when state = 13 else
+            "00" when state = 14 else
+            "00" when state = 15;   
+            
+    wadSrc <= "00" when state = 0 else
+            "10" when state = 1 else
+            "00" when state = 2 else
             "00" when state = 3 else
             "00" when state = 4 else
             "00" when state = 5 else
             "00" when state = 6 else
             "00" when state = 7 else
             "00" when state = 8 else
-            "01" when state = 9 else
+            "10" when state = 9 else
             "00" when state = 10 else
             "00" when state = 11 else
-            "00" when state = 12 else
+            "10" when state = 12 else
             "00" when state = 13 else
-            "00" when state = 14 else
-            "00" when state = 15;    
-        
+            "11" when state = 14 else
+            "00" when state = 15;   
+                
+        rad1src <= "0" when state = 0 else
+            "0" when state = 1 else
+            "0" when state = 2 else
+            "0" when state = 3 else
+            "0" when state = 4 else
+            "0" when state = 5 else
+            "0" when state = 6 else
+            "0" when state = 7 else
+            "0" when state = 8 else
+            "1" when state = 9 else
+            "0" when state = 10 else
+            "0" when state = 11 else
+            "0" when state = 12 else
+            "0" when state = 13 else
+            "0" when state = 14 else
+            "0" when state = 15;
             
+            
+        typ_dt <= "0000" when state = 0 else
+           "0000" when state = 1 else
+           "0000" when state = 2 else
+           "0000" when state = 3 else
+           "0000" when state = 4 else
+           "0000" when state = 5 else
+           "0000" when state = 6 else
+           "0000" when state = 7 else
+           "0000" when state = 8 else
+           "0000" when state = 9 else
+           "0000" when state = 10 else
+           "0000" when state = 11 else
+           "0000" when state = 12 else
+           "0000" when state = 13 else
+           "0000" when state = 14 else
+           "0000" when state = 15;
+           
+           
+         byte_off <= "00" when state = 0 else
+           "00" when state = 1 else
+           "00" when state = 2 else
+           "00" when state = 3 else
+           "00" when state = 4 else
+           "00" when state = 5 else
+           "00" when state = 6 else
+           "00" when state = 7 else
+           "00" when state = 8 else
+           "00" when state = 9 else
+           "00" when state = 10 else
+           "00" when state = 11 else
+           "00" when state = 12 else
+           "00" when state = 13 else
+           "00" when state = 14 else
+           "00" when state = 15;   
+           
+         CW <= '0' when state = 0 else
+           '0' when state = 1 else
+           '0' when state = 2 else
+           '0' when state = 3 else
+           '1' when state = 4 else
+           '1' when state = 5 else
+           '1' when state = 6 else
+           '0' when state = 7 else
+           '0' when state = 8 else
+           '0' when state = 9 else
+           '0' when state = 10 else
+           '0' when state = 11 else
+           '0' when state = 12 else
+           '1' when state = 13 else
+           '0' when state = 14 else
+           '0' when state = 15;
+           
+           
+      DW <= '0' when state = 0 else
+         '0' when state = 1 else
+         '0' when state = 2 else
+         '0' when state = 3 else
+         '1' when state = 4 else
+         '1' when state = 5 else
+         '1' when state = 6 else
+         '0' when state = 7 else
+         '0' when state = 8 else
+         '0' when state = 9 else
+         '0' when state = 10 else
+         '0' when state = 11 else
+         '0' when state = 12 else
+         '1' when state = 13 else
+         '0' when state = 14 else
+         '0' when state = 15;
+         
+   memw <= "0000" when state = 0 else
+        "0000" when state = 1 else
+        "0000" when state = 2 else
+        "0000" when state = 3 else
+        "0000" when state = 4 else
+        "0000" when state = 5 else
+        "0000" when state = 6 else
+        "0000" when state = 7 else
+        "0000" when state = 8 else
+        "0000" when state = 9 else
+        "0000" when state = 10 else
+        "0000" when state = 11 else
+        "0000" when state = 12 else
+        "0000" when state = 13 else
+        "0000" when state = 14 else
+        "0000" when state = 15;
+
+                   
 end architecture;
 
