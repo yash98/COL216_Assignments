@@ -41,7 +41,7 @@ architecture beh of processor is
 signal IorD_int: std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
 signal IRW_int: std_logic; -- Instruction write/save enable
 signal DRW_int: std_logic; -- data register write enable
-signal M2R_int: std_logic_vector(0 downto 0); -- pick data or result to write to register file
+signal M2R_int: std_logic_vector(1 downto 0); -- pick data or result to write to register file
 signal Rsrc_int: std_logic_vector(1 downto 0); -- pick rd or rm for rad2
 signal RW_int: std_logic; -- write enable for register file
 signal AW_int: std_logic;  -- rf out1 store reg write enable

@@ -22,10 +22,15 @@ begin
     begin
         amnt <= conv_integer(unsigned(amt));
         if (amnt>0 and amnt<32) then
-            --lsl    
-            if (typ = "00") then 
-                result <= a((31 - amnt) downto 0) & zero((amnt-1) downto 0);
-                carry <= a(31-amnt);
+            --lsl
+            if (typ = "00") then
+                if (amt = 0) then
+                    result <= a;
+                    carry <= '0';
+                else
+                    result <= a((31 - amnt) downto 0) & zero((amnt-1) downto 0);
+                    carry <= a(31-amnt+1);
+                end if;
             --lsr
             elsif (typ = "01") then
                 result <= zero(31 downto (31- amnt +1)) & a(31 downto amnt);

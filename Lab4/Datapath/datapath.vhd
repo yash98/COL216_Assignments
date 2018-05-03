@@ -12,7 +12,7 @@ entity datapath is
         IorD: in std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
         IRW: in std_logic; -- Instruction write/save enable
         DRW: in std_logic; -- data register write enable
-        M2R: in std_logic_vector(0 downto 0); -- pick data or result to write to register file
+        M2R: in std_logic_vector(1 downto 0); -- pick data or result to write to register file
         Rsrc: in std_logic_vector(1 downto 0); -- pick rd or rm for rad2
         RW: in std_logic; -- write enable for register file
         AW: in std_logic;  -- rf out1 store reg write enable
@@ -216,12 +216,14 @@ IorD_out <= r15_out_int when IorD = "0" else
             RES;
             
 -- Rsrc mux
-Rsrc_out <= IR(3 downto 0) when Rsrc = "0" else
-            IR(15 downto 12);
+Rsrc_out <= IR(11 downto 8) when Rsrc = "00" else
+            IR(3 downto 0) when Rsrc = "01" else
+            IR(15 downto 12) when Rsrc = "10";
             
 -- m2r mux
-m2r_out <= data_to_reg_int when m2r = "0" else
-            RES;
+m2r_out <= data_to_reg_int when m2r = "00" else
+            RES when m2r = "01" else
+            r15_out_int;
             
 -- wadsrc mux
 wadsrc_out <= IR(15 downto 12) when wadsrc = "00" else
@@ -242,20 +244,19 @@ Flags <= F;
 RES <= alu_out when ReW = '1';
 
 --  A and B and X reg
-A <= rd1_out when AW = '1';
+A <= rd1_out when rising_edge(AW);
 B <= rd2_out when rising_edge(BW);
 X <= rd2_out when rising_edge(XW);
 
-C <= c_from_shifter when CW = '1';
-D <= shifter_out when DW = '1';
+C <= c_from_shifter when rising_edge(CW);
+D <= shifter_out when rising_edge(DW);
 
 -- IR and DR reg
 IR <= mem_out when IRW = '1';
 DR <= mem_out when DRW = '1';
 
-
 instruction <= IR;
 -- tests
-test1_outer <= mul_out;
-test2_outer <= RES;
+test1_outer <= RES;
+test2_outer <= mul_out;
 end architecture;

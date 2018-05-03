@@ -14,7 +14,7 @@ entity main_control is
         IorD: out std_logic_vector(0 downto 0); -- Instruction (1) or PC inc. (0)
         IRW: out std_logic; -- Instruction write/save enable
         DRW: out std_logic; -- data register write enable
-        M2R: out std_logic_vector(0 downto 0); -- pick data or result to write to register file
+        M2R: out std_logic_vector(1 downto 0); -- pick data or result to write to register file
         Rsrc: out std_logic_vector(1 downto 0); -- pick rd or rm for rad2
         RW: out std_logic; -- write enable for register file
         AW: out std_logic;  -- rf out1 store reg write enable
@@ -66,10 +66,10 @@ begin
                     end if;
                 --Branch
                 elsif (ins(27 downto 26) = "10") then
-                    if (ins(24) = '0') then
+                    if (ins(24) = '1') then
                         state <= 14;
                     else
-                        state <= 15;
+                        state <= 13;
                     end if;
                 else
                     state <= 0;
@@ -129,8 +129,11 @@ begin
                 state <= 13;
                 
             elsif (state = 15) then
+                state <= 16;
+                
+            elsif (state = 16) then
                 state <= 0;
-
+                
             end if;
             
         end if;
@@ -658,7 +661,8 @@ begin
             "0" when state = 12 else
             "0" when state = 13 else
             "0" when state = 14 else
-            "0" when state = 15;
+            "0" when state = 15 else
+            "0" when state = 16;
 
     IRW <= '0' when state = 0 else
             '1' when state = 1 else
@@ -675,7 +679,8 @@ begin
             '0' when state = 12 else
             '0' when state = 13 else
             '0' when state = 14 else
-            '0' when state = 15;
+            '0' when state = 15 else
+            '0' when state = 16;
             
     DRW <= '0' when state = 0 else
             '0' when state = 1 else
@@ -692,24 +697,26 @@ begin
             '0' when state = 12 else
             '0' when state = 13 else
             '0' when state = 14 else
-            '0' when state = 15;
+            '0' when state = 15 else
+            '0' when state = 16;
             
-    M2R <= "1" when state = 0 else
-            "1" when state = 1 else
-            "1" when state = 2 else
-            "0" when state = 3 else
-            "0" when state = 4 else
-            "0" when state = 5 else
-            "0" when state = 6 else
-            "0" when state = 7 else
-            "1" when state = 8 else
-            "1" when state = 9 else
-            "0" when state = 10 else
-            "0" when state = 11 else
-            "1" when state = 12 else
-            "0" when state = 13 else
-            "1" when state = 14 else
-            "0" when state = 15;
+    M2R <= "01" when state = 0 else
+            "01" when state = 1 else
+            "01" when state = 2 else
+            "00" when state = 3 else
+            "00" when state = 4 else
+            "00" when state = 5 else
+            "00" when state = 6 else
+            "00" when state = 7 else
+            "01" when state = 8 else
+            "01" when state = 9 else
+            "00" when state = 10 else
+            "00" when state = 11 else
+            "01" when state = 12 else
+            "00" when state = 13 else
+            "10" when state = 14 else
+            "00" when state = 15 else
+            "01" when state = 16;
             
             
     Rsrc <= "00" when state = 0 else
@@ -727,7 +734,8 @@ begin
             "00" when state = 12 else
             "00" when state = 13 else
             "00" when state = 14 else
-            "00" when state = 15;
+            "00" when state = 15 else
+            "00" when state = 16;
             
      RW <= '0' when state = 0 else
             '1' when state = 1 else
@@ -744,7 +752,8 @@ begin
             '1' when state = 12 else
             '0' when state = 13 else
             '1' when state = 14 else
-            '0' when state = 15;
+            '0' when state = 15 else
+            '1' when state = 16;
        
      AW <= '0' when state = 0 else
             '0' when state = 1 else
@@ -761,7 +770,8 @@ begin
             '0' when state = 12 else
             '0' when state = 13 else
             '0' when state = 14 else
-            '0' when state = 15;   
+            '0' when state = 15 else
+            '0' when state = 16;   
                  
      BW <= '0' when state = 0 else
             '0' when state = 1 else
@@ -778,7 +788,8 @@ begin
             '0' when state = 12 else
             '0' when state = 13 else
             '0' when state = 14 else
-            '0' when state = 15;
+            '0' when state = 15 else
+            '0' when state = 16;
             
      XW <= '0' when state = 0 else
             '0' when state = 1 else
@@ -795,7 +806,8 @@ begin
             '0' when state = 12 else
             '0' when state = 13 else
             '0' when state = 14 else
-            '0' when state = 15;
+            '0' when state = 15 else
+            '0' when state = 16;
                 
                 
     Asrc1 <= "0" when state = 0 else
@@ -813,7 +825,8 @@ begin
         "1" when state = 12 else
         "1" when state = 13 else
         "0" when state = 14 else
-        "0" when state = 15;
+        "0" when state = 15 else
+        "0" when state = 16;
         
         
         
@@ -832,7 +845,8 @@ begin
         "00" when state = 12 else
         "00" when state = 13 else
         "00" when state = 14 else
-        "00" when state = 15;
+        "00" when state = 15 else
+        "00" when state = 16;
         
   op <= "0100" when state = 0 else
          "0000" when state = 1 else
@@ -845,11 +859,13 @@ begin
          "0000" when state = 8 else
          "0000" when state = 9 else
          "0000" when state = 10 else
-         ins(24 downto 21) when state = 11 else
+         "0100" when state = 11  and ins(23) = '1' else
+         "1101" when state = 11 and ins(23) = '0' else
          "0000" when state = 12 else
          "0000" when state = 13 else
          "0000" when state = 14 else
-         "0100" when state = 15;
+         "0100" when state = 15 else
+         "0000" when state = 16;
         
      Fset <= '0' when state = 0 else
             '0' when state = 1 else
@@ -867,7 +883,8 @@ begin
             '0' when state = 12 else
             '0' when state = 13 else
             '0' when state = 14 else
-            '0' when state = 15;
+            '0' when state = 15 else
+            '0' when state = 16;
             
     ReW <= '1' when state = 0 else
             '0' when state = 1 else
@@ -883,8 +900,9 @@ begin
             '1' when state = 11 else
             '0' when state = 12 else
             '0' when state = 13 else
-            '1' when state = 14 else
-            '0' when state = 15;
+            '0' when state = 14 else
+            '1' when state = 15 else
+            '0' when state = 16;
     
     shiftSrc <= "00" when state = 0 else
             "00" when state = 1 else
@@ -901,7 +919,8 @@ begin
             "00" when state = 12 else
             "10" when state = 13 else
             "00" when state = 14 else
-            "00" when state = 15;    
+            "00" when state = 15 else
+            "00" when state =16;    
             
     amtSrc <= "00" when state = 0 else
             "00" when state = 1 else
@@ -918,7 +937,8 @@ begin
             "00" when state = 12 else
             "01" when state = 13 else
             "00" when state = 14 else
-            "00" when state = 15;   
+            "00" when state = 15 else
+            "00" when state = 16;   
             
     wadSrc <= "10" when state = 0 else
             "10" when state = 1 else
@@ -932,27 +952,29 @@ begin
             "10" when state = 9 else
             "00" when state = 10 else
             "00" when state = 11 else
-            "10" when state = 12 else
+            "01" when state = 12 else
             "00" when state = 13 else
             "11" when state = 14 else
-            "00" when state = 15;   
+            "00" when state = 15 else
+            "10" when state = 16;   
                 
-        rad1src <= "0" when state = 0 else
-                "0" when state = 1 else
-                "0" when state = 2 else
-                "0" when state = 3 else
-                "0" when state = 4 else
-                "0" when state = 5 else
-                "0" when state = 6 else
-                "0" when state = 7 else
-                "0" when state = 8 else
-                "1" when state = 9 else
-                "0" when state = 10 else
-                "0" when state = 11 else
-                "0" when state = 12 else
-                "0" when state = 13 else
-                "0" when state = 14 else
-                "0" when state = 15;
+    rad1src <= "0" when state = 0 else
+            "0" when state = 1 else
+            "0" when state = 2 else
+            "0" when state = 3 else
+            "0" when state = 4 else
+            "0" when state = 5 else
+            "0" when state = 6 else
+            "0" when state = 7 else
+            "0" when state = 8 else
+            "1" when state = 9 else
+            "0" when state = 10 else
+            "0" when state = 11 else
+            "0" when state = 12 else
+            "0" when state = 13 else
+            "0" when state = 14 else
+            "0" when state = 15 else
+            "0" when state = 16;
             
             
         typ_dt <= "0000" when state = 0 else
@@ -970,7 +992,8 @@ begin
            "0000" when state = 12 else
            "0000" when state = 13 else
            "0000" when state = 14 else
-           "0000" when state = 15;
+           "0000" when state = 15 else
+           "0000" when state = 16;
            
            
          byte_off <= "00" when state = 0 else
@@ -988,7 +1011,8 @@ begin
            "00" when state = 12 else
            "00" when state = 13 else
            "00" when state = 14 else
-           "00" when state = 15;   
+           "00" when state = 15 else
+           "00" when state =16;   
            
          CW <= '0' when state = 0 else
            '0' when state = 1 else
@@ -1005,7 +1029,8 @@ begin
            '0' when state = 12 else
            '1' when state = 13 else
            '0' when state = 14 else
-           '0' when state = 15;
+           '0' when state = 15 else
+           '0' when state = 16;
            
            
       DW <= '0' when state = 0 else
@@ -1023,7 +1048,8 @@ begin
          '0' when state = 12 else
          '1' when state = 13 else
          '0' when state = 14 else
-         '0' when state = 15;
+         '0' when state = 15 else
+         '0' when state = 16;
          
    memw <= "0000" when state = 0 else
         "0000" when state = 1 else
@@ -1040,7 +1066,8 @@ begin
         "0000" when state = 12 else
         "0000" when state = 13 else
         "0000" when state = 14 else
-        "0000" when state = 15;
+        "0000" when state = 15 else
+        "0000" when state = 16;
 
                    
 end architecture;
